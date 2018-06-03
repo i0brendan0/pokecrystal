@@ -1,6 +1,6 @@
 # Event Commands
 
-Defined in [macros/scripts/events.asm](/macros/scripts/events.asm) and [engine/scripting.asm:ScriptCommandTable](/engine/scripting.asm).
+Defined in [macros/scripts/events.asm](/macros/scripts/events.asm) and [engine/overworld/scripting.asm:ScriptCommandTable](/engine/overworld/scripting.asm).
 
 Until this document is filled out, the [G/S Scripting Compendium](https://hax.iimarckus.org/files/scriptingcodes_eng.htm) has descriptions for most of these commands. It was written for G/S binary hacking and not Crystal assembly hacking, so it's not 100% accurate for pokecrystal.
 
@@ -99,9 +99,9 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 
 ## `$2E`: <code>giveegg <i>mon_id</i>, <i>level</i></code>
 
-## `$2F`: <code>givepokeitem <i>pointer</i></code>
+## `$2F`: <code>givepokemail <i>pointer</i></code>
 
-## `$30`: <code>checkpokeitem <i>pointer</i></code>
+## `$30`: <code>checkpokemail <i>pointer</i></code>
 
 ## `$31`: <code>checkevent <i>event_flag</i></code>
 

@@ -17,8 +17,8 @@ ITEMATTR_STRUCT_LENGTH EQU const_value
 	const TM_HM    ; 4
 
 ; item menu types
-; UseItem.dw indexes (see engine/pack.asm)
-; UseRegisteredItem.SwitchTo indexes (see engine/select_menu.asm)
+; UseItem.dw indexes (see engine/items/pack.asm)
+; UseRegisteredItem.SwitchTo indexes (see engine/overworld/select_menu.asm)
 ITEMMENU_NOUSE   EQU 0
 ITEMMENU_CURRENT EQU 4
 ITEMMENU_PARTY   EQU 5
@@ -28,6 +28,7 @@ ITEMMENU_CLOSE   EQU 6
 CANT_SELECT_F EQU 6
 CANT_TOSS_F   EQU 7
 
+NO_LIMITS   EQU 0
 CANT_SELECT EQU 1 << CANT_SELECT_F
 CANT_TOSS   EQU 1 << CANT_TOSS_F
 
@@ -130,7 +131,7 @@ MAIL_STRUCT_LENGTH EQU $2f ; mailmsg struct
 	const HELD_FOCUS_BAND
 
 
-; mart types (see engine/mart.asm)
+; mart types (see engine/items/mart.asm)
 	const_def
 	const MARTTYPE_STANDARD
 	const MARTTYPE_BITTER

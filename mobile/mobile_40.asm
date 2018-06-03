@@ -75,8 +75,8 @@ SetRAMStateForMobile: ; 100063
 
 EnableMobile: ; 100082
 	xor a
-	ld hl, wOverworldMap
-	ld bc, wOverworldMapEnd - wOverworldMap
+	ld hl, wOverworldMapBlocks
+	ld bc, wOverworldMapBlocksEnd - wOverworldMapBlocks
 	call ByteFill
 
 	di
@@ -2320,7 +2320,7 @@ Function100eb4: ; 100eb4
 	and a
 	call Function100eca
 
-asm_100eb8
+asm_100eb8:
 	ld hl, wcd68
 	inc [hl]
 	ld a, [hl]
@@ -2332,7 +2332,7 @@ asm_100eb8
 Function100ec4: ; 100ec4
 	ret
 
-Function100ec5
+Function100ec5:
 	ld hl, wcd67
 	inc [hl]
 	ret

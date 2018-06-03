@@ -18,7 +18,7 @@ HallOfFame:: ; 0x8640e
 
 	ld hl, wHallOfFameCount
 	ld a, [hl]
-	cp 200
+	cp HOF_MASTER_COUNT
 	jr nc, .ok
 	inc [hl]
 .ok
@@ -143,12 +143,12 @@ AnimateHallOfFame: ; 864c3
 
 
 GetHallOfFameParty: ; 8653f
-	ld hl, wOverworldMap
-	ld bc, HOF_LENGTH
+	ld hl, wHallOfFamePokemonList
+	ld bc, wHallOfFamePokemonListEnd - wHallOfFamePokemonList + 1
 	xor a
 	call ByteFill
 	ld a, [wHallOfFameCount]
-	ld de, wOverworldMap
+	ld de, wHallOfFamePokemonList
 	ld [de], a
 	inc de
 	ld hl, wPartySpecies
@@ -216,7 +216,7 @@ GetHallOfFameParty: ; 8653f
 	pop bc
 	inc c
 	pop de
-	ld hl, HOF_MON_LENGTH
+	ld hl, wHallOfFamePokemonListMon1End - wHallOfFamePokemonListMon1
 	add hl, de
 	ld e, l
 	ld d, h
@@ -224,7 +224,7 @@ GetHallOfFameParty: ; 8653f
 	jr .next
 
 .done
-	ld a, $ff
+	ld a, -1
 	ld [de], a
 	ret
 ; 865b5
@@ -355,7 +355,7 @@ _HallOfFamePC: ; 86650
 
 .DisplayMonAndStrings:
 ; Print the number of times the player has entered the Hall of Fame.
-; If that number is above 200, print "HOF Master!" instead.
+; If that number is at least HOF_MASTER_COUNT, print "HOF Master!" instead.
 	ld a, [wHallOfFameMonCounter]
 	cp PARTY_LENGTH
 	jr nc, .fail
@@ -376,7 +376,7 @@ _HallOfFamePC: ; 86650
 	pop hl
 	call DisplayHOFMon
 	ld a, [wHallOfFameTempWinCount]
-	cp 200 + 1
+	cp HOF_MASTER_COUNT + 1 ; should be HOF_MASTER_COUNT
 	jr c, .print_num_hof
 	ld de, .HOFMaster
 	hlcoord 1, 2
@@ -422,7 +422,7 @@ LoadHOFTeam: ; 8671c
 	cp NUM_HOF_TEAMS
 	jr nc, .invalid
 	ld hl, sHallOfFame
-	ld bc, HOF_LENGTH
+	ld bc, wHallOfFameTempEnd - wHallOfFameTemp + 1
 	call AddNTimes
 	ld a, BANK(sHallOfFame)
 	call GetSRAMBank
@@ -430,7 +430,7 @@ LoadHOFTeam: ; 8671c
 	and a
 	jr z, .absent
 	ld de, wHallOfFameTemp
-	ld bc, HOF_LENGTH
+	ld bc, wHallOfFameTempEnd - wHallOfFameTemp + 1
 	call CopyBytes
 	call CloseSRAM
 	and a

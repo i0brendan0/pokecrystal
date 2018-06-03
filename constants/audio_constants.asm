@@ -17,7 +17,7 @@
 	const CC ; d (used for pitchoffset)
 
 ; channel
-; ChannelPointers indexes (see engine/audio.asm)
+; ChannelPointers indexes (see audio/engine.asm)
 	const_def
 	const CHAN1 ; 0
 	const CHAN2 ; 1
@@ -30,6 +30,8 @@ NUM_NOISE_CHANS EQU const_value
 	const CHAN7 ; 6
 	const CHAN8 ; 7
 NUM_CHANNELS EQU const_value
+
+NOISE_CHAN_F EQU 2 ; bit set in CHAN5-CHAN7
 
 ; Flags1
 	const_def
