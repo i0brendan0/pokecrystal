@@ -16,15 +16,14 @@ sgb_pal23: MACRO
 	db (SGB_PAL23 << 3) + 1
 ENDM
 
-
 PalPacket_GSTitleScreen:
 	sgb_pal_set GS_TITLE_SCREEN_0, GS_TITLE_SCREEN_1, GS_TITLE_SCREEN_2, GS_TITLE_SCREEN_3
 
 PalPacket_SCGB_13:
-	sgb_pal_set GREENMON_NITE, CGB_BADGE, RB_BROWNMON, 00
+	sgb_pal_set BETA_SHINY_GREENMON, CGB_BADGE, RB_BROWNMON, 00
 
-PalPacket_SCGB_11:
-	sgb_pal_set SCGB_11_0, SCGB_11_1, SCGB_11_2, SCGB_11_3
+PalPacket_BetaPoker:
+	sgb_pal_set BETA_POKER_0, BETA_POKER_1, BETA_POKER_2, BETA_POKER_3
 
 PalPacket_UnownPuzzle:
 	sgb_pal_set UNOWN_PUZZLE, UNOWN_PUZZLE, UNOWN_PUZZLE, UNOWN_PUZZLE
@@ -35,8 +34,8 @@ PalPacket_9bd6:
 PalPacket_GSIntroShellderLapras:
 	sgb_pal_set GS_INTRO_SHELLDER_LAPRAS, 00, 00, 00
 
-UnreferencedPalPacket_9bf6:
-	sgb_pal_set 37, 00, 00, 00
+UnreferencedPalPacket_BetaIntroLapras:
+	sgb_pal_set BETA_INTRO_LAPRAS, 00, 00, 00
 
 PalPacket_GSIntroJigglypuffPikachu:
 	sgb_pal_set GS_INTRO_JIGGLYPUFF_PIKACHU_BG, GS_INTRO_JIGGLYPUFF_PIKACHU_OB, 00, 00
@@ -44,13 +43,13 @@ PalPacket_GSIntroJigglypuffPikachu:
 PalPacket_GSIntroStartersTransition:
 	sgb_pal_set GS_INTRO_STARTERS_TRANSITION, 00, 00, 00
 
-PalPacket_Function8b4d:
-	sgb_pal_set 3B, 00, 00, 00
+PalPacket_BetaIntroVenusaur:
+	sgb_pal_set BETA_INTRO_VENUSAUR, 00, 00, 00
 
 PalPacket_Pack:
 	sgb_pal_set PACK, 00, 00, 00
 
-PalPacket_SCGB_0F:
+PalPacket_BetaPikachuMinigame:
 	sgb_pal_set GS_INTRO_JIGGLYPUFF_PIKACHU_OB, 00, 00, 00
 
 PalPacket_PartyMenu:
@@ -69,7 +68,7 @@ PalPacket_SlotMachine:
 	sgb_pal_set SLOT_MACHINE_0, SLOT_MACHINE_1, SLOT_MACHINE_2, SLOT_MACHINE_3
 
 PalPacket_SCGB_06:
-	sgb_pal_set 33, 34, DIPLOMA, RB_PURPLEMON
+	sgb_pal_set BETA_LOGO_1, BETA_LOGO_2, DIPLOMA, RB_PURPLEMON
 
 PalPacket_Diploma:
 	sgb_pal_set DIPLOMA, 00, 00, 00
@@ -79,7 +78,6 @@ PalPacket_TradeTube:
 
 PalPacket_GamefreakLogo:
 	sgb_pal_set GS_INTRO_GAMEFREAK_LOGO, 00, 00, 00
-
 
 PalPacket_9ce6:
 	sgb_pal01

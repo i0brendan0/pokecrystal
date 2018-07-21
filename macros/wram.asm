@@ -76,7 +76,6 @@ red_party_struct: MACRO
 \1Special::    dw
 ENDM
 
-
 battle_struct: MACRO
 \1Species::   db
 \1Item::      db
@@ -114,7 +113,6 @@ box: MACRO
 \1End::             ds 2 ; padding
 ENDM
 
-
 map_connection_struct: MACRO
 \1ConnectedMapGroup::       db
 \1ConnectedMapNumber::      db
@@ -131,7 +129,7 @@ channel_struct: MACRO
 ; Addreses are wChannel1 (c101).
 \1MusicID::           dw
 \1MusicBank::         db
-\1Flags::             db ; 0:on/off 1:subroutine 3:sfx 4:noise 5:rest
+\1Flags1::            db ; 0:on/off 1:subroutine 3:sfx 4:noise 5:rest
 \1Flags2::            db ; 0:vibrato on/off 2:duty 4:cry pitch
 \1Flags3::            db ; 0:vibrato up/down
 \1MusicAddress::      dw
@@ -141,37 +139,35 @@ channel_struct: MACRO
 \1Condition::         db ; conditional jumps
 \1DutyCycle::         db ; bits 6-7 (0:12.5% 1:25% 2:50% 3:75%)
 \1Intensity::         db ; hi:pressure lo:velocity
-\1Frequency:: ; 11 bits
-\1FrequencyLo::       db
-\1FrequencyHi::       db
+\1Frequency::         dw ; 11 bits
 \1Pitch::             db ; 0:rest 1-c:note
 \1Octave::            db ; 7-0 (0 is highest)
 \1PitchOffset::       db ; raises existing octaves (to repeat phrases)
 \1NoteDuration::      db ; frames remaining for the current note
-\1Field16::           ds 1 ; c117
-                      ds 1 ; c118
+\1Field16::           ds 1
+                      ds 1
 \1LoopCount::         db
 \1Tempo::             dw
 \1Tracks::            db ; hi:left lo:right
-\1SFXDutyLoop::       db ; c11d
+\1SFXDutyLoop::       db
 \1VibratoDelayCount:: db ; initialized by \1VibratoDelay
 \1VibratoDelay::      db ; number of frames a note plays until vibrato starts
 \1VibratoExtent::     db
 \1VibratoRate::       db ; hi:frames for each alt lo:frames to the next alt
 \1PitchWheelTarget::  dw ; frequency endpoint for pitch wheel
-\1PitchWheelAmount::  db ; c124
-\1PitchWheelAmountFraction::   db ; c125
-\1Field25::           db ; c126
-                      ds 1 ; c127
+\1PitchWheelAmount::  db
+\1PitchWheelAmountFraction::   db
+\1Field25::           db
+                      ds 1
 \1CryPitch::          dw
 \1Field29::           ds 1
 \1Field2a::           ds 2
 \1Field2c::           ds 1
 \1NoteLength::        db ; frames per 16th note
-\1Field2e::           ds 1 ; c12f
-\1Field2f::           ds 1 ; c130
-\1Field30::           ds 1 ; c131
-                      ds 1 ; c132
+\1Field2e::           ds 1
+\1Field2f::           ds 1
+\1Field30::           ds 1
+                      ds 1
 ENDM
 
 battle_tower_struct: MACRO

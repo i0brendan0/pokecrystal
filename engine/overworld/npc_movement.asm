@@ -1,37 +1,37 @@
-Function6ec1: ; 6ec1
-
+CanObjectMoveInDirection:
 	ld hl, OBJECT_PALETTE
 	add hl, bc
-	bit 5, [hl]
-	jr z, .not_bit_5
+	bit SWIMMING_F, [hl]
+	jr z, .not_swimming
 
 	ld hl, OBJECT_FLAGS1
 	add hl, bc
-	bit 4, [hl] ; lost, uncomment next line to fix
-;	jr nz, .resume
+	bit NOCLIP_TILES_F, [hl] ; lost, uncomment next line to fix
+	; jr nz, .noclip_tiles
 	push hl
 	push bc
-	call Function6f2c
+	call WillObjectBumpIntoLand
 	pop bc
 	pop hl
 	ret c
-	jr .resume
+	jr .continue
 
-.not_bit_5
+.not_swimming
 	ld hl, OBJECT_FLAGS1
 	add hl, bc
-	bit 4, [hl]
-	jr nz, .resume
+	bit NOCLIP_TILES_F, [hl]
+	jr nz, .noclip_tiles
 	push hl
 	push bc
-	call Function6f07
+	call WillObjectBumpIntoWater
 	pop bc
 	pop hl
 	ret c
 
-.resume
-	bit 6, [hl]
-	jr nz, .bit_6
+.noclip_tiles
+.continue
+	bit NOCLIP_OBJS_F, [hl]
+	jr nz, .noclip_objs
 
 	push hl
 	push bc
@@ -40,9 +40,9 @@ Function6ec1: ; 6ec1
 	pop hl
 	ret c
 
-.bit_6
-	bit 5, [hl]
-	jr nz, .bit_5
+.noclip_objs
+	bit MOVE_ANYWHERE_F, [hl]
+	jr nz, .move_anywhere
 	push hl
 	call HasObjectReachedMovementLimit
 	pop hl
@@ -53,13 +53,11 @@ Function6ec1: ; 6ec1
 	pop hl
 	ret c
 
-.bit_5
+.move_anywhere
 	and a
 	ret
-; 6f07
 
-
-Function6f07: ; 6f07
+WillObjectBumpIntoWater:
 	call Function6f5f
 	ret c
 	ld hl, OBJECT_NEXT_MAP_X
@@ -78,12 +76,11 @@ Function6f07: ; 6f07
 	ld d, a
 	call GetTileCollision
 	and a ; LANDTILE
-	jr z, Function6f3e
+	jr z, WillObjectBumpIntoTile
 	scf
 	ret
-; 6f2c
 
-Function6f2c: ; 6f2c
+WillObjectBumpIntoLand:
 	call Function6f5f
 	ret c
 	ld hl, OBJECT_NEXT_TILE
@@ -91,12 +88,11 @@ Function6f2c: ; 6f2c
 	ld a, [hl]
 	call GetTileCollision
 	cp WATERTILE
-	jr z, Function6f3e
+	jr z, WillObjectBumpIntoTile
 	scf
 	ret
-; 6f3e
 
-Function6f3e: ; 6f3e
+WillObjectBumpIntoTile:
 	ld hl, OBJECT_NEXT_TILE
 	add hl, bc
 	ld a, [hl]
@@ -116,13 +112,11 @@ Function6f3e: ; 6f3e
 	ret z
 	scf
 	ret
-; 6f5b
 
 .data_6f5b
 	db DOWN_MASK, UP_MASK, RIGHT_MASK, LEFT_MASK
-; 6f5f
 
-Function6f5f: ; 6f5f
+Function6f5f:
 	ld hl, OBJECT_STANDING_TILE
 	add hl, bc
 	ld a, [hl]
@@ -141,18 +135,16 @@ Function6f5f: ; 6f5f
 	ret z
 	scf
 	ret
-; 6f7b
 
 .data_6f7b
 	db UP_MASK, DOWN_MASK, LEFT_MASK, RIGHT_MASK
-; 6f7f
 
-Function6f7f: ; 6f7f
+Function6f7f:
 	ld d, a
 	and $f0
-	cp $b0
+	cp HI_NYBBLE_SIDE_WALLS
 	jr z, .done
-	cp $c0
+	cp HI_NYBBLE_UNUSED_C0
 	jr z, .done
 	xor a
 	ret
@@ -167,14 +159,12 @@ Function6f7f: ; 6f7f
 	ld a, [hl]
 	scf
 	ret
-; 6f99
 
 .data_6f99
 	db  8, 4, 1, 2
 	db 10, 6, 9, 5
-; 6fa1
 
-Function6fa1: ; 6fa1
+Function6fa1:
 	ld hl, OBJECT_DIRECTION_WALKING
 	add hl, bc
 	ld a, [hl]
@@ -223,12 +213,8 @@ Function6fa1: ; 6fa1
 .not_land
 	scf
 	ret
-; 6fd9
 
-
-
-CheckFacingObject:: ; 6fd9
-
+CheckFacingObject::
 	call GetFacingTileCoord
 
 ; Double the distance for counter tiles.
@@ -266,10 +252,8 @@ CheckFacingObject:: ; 6fd9
 .standing
 	scf
 	ret
-; 7009
 
-
-WillObjectBumpIntoSomeoneElse: ; 7009
+WillObjectBumpIntoSomeoneElse:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld d, [hl]
@@ -277,7 +261,6 @@ WillObjectBumpIntoSomeoneElse: ; 7009
 	add hl, bc
 	ld e, [hl]
 	jr IsNPCAtCoord
-; 7015
 
 Unreferenced_Function7015:
 	ld a, [hMapObjectIndexBuffer]
@@ -286,7 +269,7 @@ Unreferenced_Function7015:
 	call IsNPCAtCoord
 	ret
 
-.CheckWillBeFacingNPC: ; 7021
+.CheckWillBeFacingNPC:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld d, [hl]
@@ -314,9 +297,8 @@ Unreferenced_Function7015:
 .left
 	dec d
 	ret
-; 7041
 
-IsNPCAtCoord: ; 7041
+IsNPCAtCoord:
 	ld bc, wObjectStructs
 	xor a
 .loop
@@ -331,7 +313,7 @@ IsNPCAtCoord: ; 7041
 
 	ld hl, OBJECT_PALETTE
 	add hl, bc
-	bit 7, [hl]
+	bit BIG_OBJECT_F, [hl]
 	jr z, .got
 
 	call Function7171
@@ -389,9 +371,8 @@ IsNPCAtCoord: ; 7041
 .setcarry
 	scf
 	ret
-; 70a4
 
-HasObjectReachedMovementLimit: ; 70a4
+HasObjectReachedMovementLimit:
 	ld hl, OBJECT_RADIUS
 	add hl, bc
 	ld a, [hl]
@@ -449,9 +430,8 @@ HasObjectReachedMovementLimit: ; 70a4
 .yes
 	scf
 	ret
-; 70ed
 
-IsObjectMovingOffEdgeOfScreen: ; 70ed
+IsObjectMovingOffEdgeOfScreen:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld a, [wXCoord]
@@ -480,7 +460,6 @@ IsObjectMovingOffEdgeOfScreen: ; 70ed
 .yes
 	scf
 	ret
-; 7113
 
 Unreferenced_Function7113:
 	ld a, [wPlayerStandingMapX]
@@ -546,10 +525,8 @@ Unreferenced_Function7113:
 .yes
 	scf
 	ret
-; 7171
 
-
-Function7171: ; 7171
+Function7171:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld a, d
@@ -570,4 +547,3 @@ Function7171: ; 7171
 .nope
 	and a
 	ret
-; 718d

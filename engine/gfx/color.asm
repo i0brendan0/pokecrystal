@@ -43,37 +43,36 @@ CheckShininess:
 	and a
 	ret
 
-Unused_CheckContestMon:
-; Check a mon's DVs at hl in the bug catching contest.
-; Return carry if its DVs are good enough to place in the contest.
+Unused_CheckShininess:
+; Return carry if the DVs at hl are all 10 or higher.
 
 ; Attack
 	ld a, [hl]
 	cp 10 << 4
-	jr c, .Bad
+	jr c, .NotShiny
 
 ; Defense
 	ld a, [hli]
 	and $f
 	cp 10
-	jr c, .Bad
+	jr c, .NotShiny
 
 ; Speed
 	ld a, [hl]
 	cp 10 << 4
-	jr c, .Bad
+	jr c, .NotShiny
 
 ; Special
 	ld a, [hl]
 	and $f
 	cp 10
-	jr c, .Bad
+	jr c, .NotShiny
 
-.Good:
+.Shiny:
 	scf
 	ret
 
-.Bad:
+.NotShiny:
 	and a
 	ret
 
@@ -108,7 +107,7 @@ InitPartyMenuPalettes:
 	ret
 
 ; SGB layout for SCGB_PARTY_MENU_HP_PALS
-SGB_ApplyPartyMenuHPPals: ; 8ade
+SGB_ApplyPartyMenuHPPals:
 	ld hl, wHPPals
 	ld a, [wSGBPals]
 	ld e, a
@@ -182,12 +181,12 @@ Unreferenced_Function8b4d:
 	ld a, [hSGB]
 	and a
 	ret z
-	ld hl, PalPacket_Function8b4d
+	ld hl, PalPacket_BetaIntroVenusaur
 	jp PushSGBPals_
 
 .cgb
 	ld de, wOBPals1
-	ld a, PREDEFPAL_3B
+	ld a, PREDEFPAL_BETA_INTRO_VENUSAUR
 	call GetPredefPal
 	jp LoadHLPaletteIntoDE
 
@@ -649,7 +648,7 @@ ApplyAttrMap:
 	ret
 
 ; CGB layout for SCGB_PARTY_MENU_HP_PALS
-CGB_ApplyPartyMenuHPPals: ; 96f3
+CGB_ApplyPartyMenuHPPals:
 	ld hl, wHPPals
 	ld a, [wSGBPals]
 	ld e, a
@@ -1129,7 +1128,7 @@ SGBBorder_YetMorePalPushing:
 	ld [rBGP], a
 	ret
 
-CopyData: ; 0x9a52
+CopyData:
 ; copy bc bytes of data from hl to de
 .loop
 	ld a, [hli]
@@ -1140,9 +1139,8 @@ CopyData: ; 0x9a52
 	or b
 	jr nz, .loop
 	ret
-; 0x9a5b
 
-ClearBytes: ; 0x9a5b
+ClearBytes:
 ; clear bc bytes of data starting from de
 .loop
 	xor a
@@ -1153,9 +1151,8 @@ ClearBytes: ; 0x9a5b
 	or b
 	jr nz, .loop
 	ret
-; 0x9a64
 
-DrawDefaultTiles: ; 0x9a64
+DrawDefaultTiles:
 ; Draw 240 tiles (2/3 of the screen) from tiles in VRAM
 	hlbgcoord 0, 0 ; BG Map 0
 	ld de, BG_MAP_WIDTH - SCREEN_WIDTH
@@ -1173,7 +1170,6 @@ DrawDefaultTiles: ; 0x9a64
 	dec c
 	jr nz, .line
 	ret
-; 0x9a7a
 
 SGBDelayCycles:
 	ld de, 7000
@@ -1349,8 +1345,8 @@ INCLUDE "gfx/pokegear/pokegear.pal"
 FemalePokegearPals:
 INCLUDE "gfx/pokegear/pokegear_f.pal"
 
-Palettes_SCGB_11:
-INCLUDE "gfx/unknown/b789.pal"
+BetaPokerPals:
+INCLUDE "gfx/beta_poker/beta_poker.pal"
 
 SlotMachinePals:
 INCLUDE "gfx/slots/slots.pal"
