@@ -124,7 +124,7 @@ AnimateHallOfFame:
 	call PlaceString
 	call WaitBGMap
 	decoord 6, 5
-	ld c, $6
+	ld c, ANIM_MON_HOF
 	predef HOF_AnimateFrontpic
 	ld c, 60
 	call DelayFrames
@@ -390,7 +390,7 @@ _HallOfFamePC:
 	call GetSGBLayout
 	call SetPalettes
 	decoord 6, 5
-	ld c, $6
+	ld c, ANIM_MON_HOF
 	predef HOF_AnimateFrontpic
 	and a
 	ret
@@ -462,7 +462,7 @@ DisplayHOFMon:
 	call TextBox
 	ld a, [wTempMonSpecies]
 	ld [wCurPartySpecies], a
-	ld [wd265], a
+	ld [wDeciramBuffer], a
 	ld hl, wTempMonDVs
 	predef GetUnownLetter
 	xor a
@@ -477,7 +477,7 @@ DisplayHOFMon:
 	ld [hli], a
 	ld [hl], "<DOT>"
 	hlcoord 3, 13
-	ld de, wd265
+	ld de, wDeciramBuffer
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 3
 	call PrintNum
 	call GetBasePokemonName

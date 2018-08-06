@@ -29,7 +29,7 @@ StartMenu::
 	call .SetUpMenuItems
 	ld a, [wBattleMenuCursorBuffer]
 	ld [wMenuCursorBuffer], a
-	call .DrawMenuAccount_
+	call .DrawMenuAccount
 	call DrawVariableLengthMenuBox
 	call .DrawBugContestStatusBox
 	call SafeUpdateSprites
@@ -49,7 +49,7 @@ StartMenu::
 .Select:
 	call .GetInput
 	jr c, .Exit
-	call .DrawMenuAccount
+	call ._DrawMenuAccount
 	ld a, [wMenuCursorBuffer]
 	ld [wBattleMenuCursorBuffer], a
 	call PlayClickSFX
@@ -96,7 +96,7 @@ StartMenu::
 ; Return carry on exit, and no-carry on selection.
 	xor a
 	ld [hBGMapMode], a
-	call .DrawMenuAccount
+	call ._DrawMenuAccount
 	call SetUpMenu
 	ld a, $ff
 	ld [wMenuSelection], a
@@ -147,7 +147,7 @@ StartMenu::
 	call ClearBGPalettes
 	call Call_ExitMenu
 	call ReloadTilesetAndPalettes
-	call .DrawMenuAccount_
+	call .DrawMenuAccount
 	call DrawVariableLengthMenuBox
 	call .DrawBugContestStatus
 	call UpdateSprites
@@ -360,17 +360,17 @@ endr
 	inc c
 	ret
 
-.DrawMenuAccount_:
-	jp .DrawMenuAccount
+.DrawMenuAccount:
+	jp ._DrawMenuAccount
 
 .PrintMenuAccount:
 	call .IsMenuAccountOn
 	ret z
-	call .DrawMenuAccount
+	call ._DrawMenuAccount
 	decoord 0, 14
 	jp .MenuDesc
 
-.DrawMenuAccount:
+._DrawMenuAccount:
 	call .IsMenuAccountOn
 	ret z
 	hlcoord 0, 13
@@ -639,7 +639,7 @@ CantUseItemText:
 
 PartyMonItemName:
 	ld a, [wCurItem]
-	ld [wd265], a
+	ld [wNamedObjectIndexBuffer], a
 	call GetItemName
 	call CopyName1
 	ret
@@ -842,17 +842,17 @@ TryGiveItemToPartymon:
 	ret
 
 .already_holding_item
-	ld [wd265], a
+	ld [wNamedObjectIndexBuffer], a
 	call GetItemName
 	ld hl, SwitchAlreadyHoldingText
 	call StartMenuYesNo
 	jr c, .abort
 
 	call GiveItemToPokemon
-	ld a, [wd265]
+	ld a, [wNamedObjectIndexBuffer]
 	push af
 	ld a, [wCurItem]
-	ld [wd265], a
+	ld [wNamedObjectIndexBuffer], a
 	pop af
 	ld [wCurItem], a
 	call ReceiveItemFromPokemon
@@ -860,13 +860,13 @@ TryGiveItemToPartymon:
 
 	ld hl, TookAndMadeHoldText
 	call MenuTextBoxBackup
-	ld a, [wd265]
+	ld a, [wNamedObjectIndexBuffer]
 	ld [wCurItem], a
 	call GivePartyItem
 	ret
 
 .bag_full
-	ld a, [wd265]
+	ld a, [wNamedObjectIndexBuffer]
 	ld [wCurItem], a
 	call ReceiveItemFromPokemon
 	ld hl, ItemStorageIsFullText
@@ -901,7 +901,7 @@ TakePartyItem:
 	farcall ItemIsMail
 	call GetPartyItemLocation
 	ld a, [hl]
-	ld [wd265], a
+	ld [wNamedObjectIndexBuffer], a
 	ld [hl], NO_ITEM
 	call GetItemName
 	ld hl, TookFromText
@@ -1654,8 +1654,8 @@ SetUpMoveScreenBG:
 	ld hl, wPartySpecies
 	add hl, de
 	ld a, [hl]
-	ld [wd265], a
-	ld e, $2
+	ld [wTempIconSpecies], a
+	ld e, MONICON_MOVES
 	farcall LoadMenuMonIcon
 	hlcoord 0, 1
 	ld b, 9
@@ -1724,7 +1724,7 @@ PrepareToPlaceMoveData:
 	ld b, $0
 	add hl, bc
 	ld a, [hl]
-	ld [wCurMove], a
+	ld [wCurSpecies], a
 	hlcoord 1, 12
 	lb bc, 5, 18
 	jp ClearBox
@@ -1741,11 +1741,11 @@ PlaceMoveData:
 	hlcoord 12, 12
 	ld de, String_MoveAtk
 	call PlaceString
-	ld a, [wCurMove]
+	ld a, [wCurSpecies]
 	ld b, a
 	hlcoord 2, 12
 	predef PrintMoveType
-	ld a, [wCurMove]
+	ld a, [wCurSpecies]
 	dec a
 	ld hl, Moves + MOVE_POWER
 	ld bc, MOVE_LENGTH
@@ -1755,8 +1755,8 @@ PlaceMoveData:
 	hlcoord 16, 12
 	cp 2
 	jr c, .no_power
-	ld [wd265], a
-	ld de, wd265
+	ld [wDeciramBuffer], a
+	ld de, wDeciramBuffer
 	lb bc, 1, 3
 	call PrintNum
 	jr .description

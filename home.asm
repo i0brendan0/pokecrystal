@@ -162,61 +162,14 @@ CallPointerAt::
 	rst Bankswitch
 	ret
 
-QueueScript::
-; Push pointer hl in the current bank to wQueuedScriptBank.
-	ld a, [hROMBank]
-
-FarQueueScript::
-; Push pointer a:hl to wQueuedScriptBank.
-	ld [wQueuedScriptBank], a
-	ld a, l
-	ld [wQueuedScriptAddr], a
-	ld a, h
-	ld [wQueuedScriptAddr + 1], a
-	ret
-
-StringCmp::
-; Compare c bytes at de and hl.
-; Return z if they all match.
-.loop
-	ld a, [de]
-	cp [hl]
-	ret nz
-	inc de
-	inc hl
-	dec c
-	jr nz, .loop
-	ret
-
-CompareLong::
-; Compare bc bytes at de and hl.
-; Return carry if they all match.
-
-	ld a, [de]
-	cp [hl]
-	jr nz, .Diff
-
-	inc de
-	inc hl
-	dec bc
-
-	ld a, b
-	or c
-	jr nz, CompareLong
-
-	scf
-	ret
-
-.Diff:
-	and a
-	ret
-
+INCLUDE "home/queue_script.asm"
+INCLUDE "home/compare.asm"
 INCLUDE "home/tilemap.asm"
 INCLUDE "home/hp_pals.asm"
 
 CountSetBits::
 ; Count the number of set bits in b bytes starting from hl.
-; Return in a, c and [wd265].
+; Return in a, c and [wNumSetBits].
 	ld c, 0
 .next
 	ld a, [hli]
@@ -235,7 +188,7 @@ CountSetBits::
 	jr nz, .next
 
 	ld a, c
-	ld [wd265], a
+	ld [wNumSetBits], a
 	ret
 
 GetWeekday::

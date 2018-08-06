@@ -268,12 +268,12 @@ PrintUnownStamp:
 	ld [wPrinterQueueLength], a
 	ret
 
-PrintMail:
-	call PrintMail_
+PrintMailAndExit:
+	call PrintMail
 	call Printer_ExitPrinter
 	ret
 
-PrintMail_:
+PrintMail:
 	ld a, [wPrinterQueueLength]
 	push af
 	xor a
@@ -725,7 +725,7 @@ Printer_PrintBoxListSegment:
 	ld a, [de]
 	cp $ff
 	jp z, .finish
-	ld [wd265], a
+	ld [wNamedObjectIndexBuffer], a
 	ld [wCurPartySpecies], a
 
 	push bc

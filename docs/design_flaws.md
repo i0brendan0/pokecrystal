@@ -152,41 +152,44 @@ Don't enforce `org $4000` in pokecrystal.link.
 
 Modify `GetFrontpicPointer`:
 
-```asm
-	ld a, [wCurPartySpecies]
-	cp UNOWN
-	jr z, .unown
-	ld a, [wCurPartySpecies]
-	ld hl, PokemonPicPointers
-	ld d, BANK(PokemonPicPointers)
-	jr .ok
+```diff
+ 	ld a, [wCurPartySpecies]
+ 	cp UNOWN
+ 	jr z, .unown
+ 	ld a, [wCurPartySpecies]
++	ld hl, PokemonPicPointers
+ 	ld d, BANK(PokemonPicPointers)
+ 	jr .ok
 
-.unown
-	ld a, [wUnownLetter]
-	ld hl, UnownPicPointers
-	ld d, BANK(UnownPicPointers)
+ .unown
+ 	ld a, [wUnownLetter]
++	ld hl, UnownPicPointers
+ 	ld d, BANK(UnownPicPointers)
 
-.ok
-	dec a
-	ld bc, 6
-	call AddNTimes
+ .ok
+-	ld hl, PokemonPicPointers ; UnownPicPointers
+ 	dec a
+ 	ld bc, 6
+ 	call AddNTimes
 ```
 
 And `GetMonBackpic`:
 
-```asm
-	ld a, b
-	ld hl, PokemonPicPointers
-	ld d, BANK(PokemonPicPointers)
-	cp UNOWN
-	jr nz, .ok
-	ld a, c
-	ld hl, UnownPicPointers
-	ld d, BANK(UnownPicPointers)
-.ok
-	dec a
-	ld bc, 6
-	call AddNTimes
+```diff
+-	; These are assumed to be at the same address in their respective banks.
+-	ld hl, PokemonPicPointers ; UnownPicPointers
+ 	ld a, b
++	ld hl, PokemonPicPointers
+ 	ld d, BANK(PokemonPicPointers)
+ 	cp UNOWN
+ 	jr nz, .ok
+ 	ld a, c
++	ld hl, UnownPicPointers
+ 	ld d, BANK(UnownPicPointers)
+ .ok
+ 	dec a
+ 	ld bc, 6
+ 	call AddNTimes
 ```
 
 
@@ -268,12 +271,26 @@ INCBIN "gfx/footprints/wartortle.1bpp"
 
 Modify `Pokedex_LoadAnyFootprint`:
 
-```asm
-	ld e, l
-	ld d, h
-	ld hl, vTiles2 tile $62
-	lb bc, BANK(Footprints), 4
-	call Request1bpp
+```diff
+-	push hl
+ 	ld e, l
+ 	ld d, h
+ 	ld hl, vTiles2 tile $62
+-	lb bc, BANK(Footprints), 2
++	lb bc, BANK(Footprints), 4
+ 	call Request1bpp
+-	pop hl
+-
+-	; Whoever was editing footprints forgot to fix their
+-	; tile editor. Now each bottom half is 8 tiles off.
+-	ld de, 8 tiles
+-	add hl, de
+-
+-	ld e, l
+-	ld d, h
+-	ld hl, vTiles2 tile $64
+-	lb bc, BANK(Footprints), 2
+-	call Request1bpp
 ```
 
 
@@ -341,22 +358,41 @@ Move `ITEM_C3` and `ITEM_DC` above all the TMs in every table of item data.
 
 Modify engine/items/items.asm:
 
-```asm
-GetTMHMNumber::
-; Return the number of a TM/HM by item id c.
-	ld a, c
-	sub TM01
-	inc a
-	ld c, a
-	ret
+```diff
+ GetTMHMNumber::
+ ; Return the number of a TM/HM by item id c.
+ 	ld a, c
+-; Skip any dummy items.
+-	cp ITEM_C3 ; TM04-05
+-	jr c, .done
+-	cp ITEM_DC ; TM28-29
+-	jr c, .skip
+-	dec a
+-.skip
+-	dec a
+-.done
+ 	sub TM01
+ 	inc a
+ 	ld c, a
+ 	ret
 
-GetNumberedTMHM:
-; Return the item id of a TM/HM by number c.
-	ld a, c
-	add TM01
-	dec a
-	ld c, a
-	ret
+ GetNumberedTMHM:
+ ; Return the item id of a TM/HM by number c.
+ 	ld a, c
+-; Skip any gaps.
+-	cp ITEM_C3 - (TM01 - 1)
+-	jr c, .done
+-	cp ITEM_DC - (TM01 - 1) - 1
+-	jr c, .skip_one
+-.skip_two
+-	inc a
+-.skip_one
+-	inc a
+-.done
+ 	add TM01
+ 	dec a
+ 	ld c, a
+ 	ret
 ```
 
 
