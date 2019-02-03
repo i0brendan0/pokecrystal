@@ -1,7 +1,7 @@
 NUM_MOM_ITEMS_1 EQUS "((MomItems_1.End - MomItems_1) / 8)"
 NUM_MOM_ITEMS_2 EQUS "((MomItems_2.End - MomItems_2) / 8)"
 
-const_value = 1
+	const_def 1
 	const MOM_ITEM
 	const MOM_DOLL
 
@@ -38,7 +38,7 @@ MomTriesToBuySomething::
 	inc [hl]
 .ok
 	ld a, PHONE_MOM
-	ld [wCurrentCaller], a
+	ld [wCurCaller], a
 	ld bc, wEngineBuffer2
 	ld hl, 0
 	add hl, bc
@@ -61,11 +61,11 @@ CheckBalance_MomItem2:
 	jr nc, .nope
 	call GetItemFromMom
 	ld a, [hli]
-	ld [hMoneyTemp], a
+	ldh [hMoneyTemp], a
 	ld a, [hli]
-	ld [hMoneyTemp + 1], a
+	ldh [hMoneyTemp + 1], a
 	ld a, [hli]
-	ld [hMoneyTemp + 2], a
+	ldh [hMoneyTemp + 2], a
 	ld de, wMomsMoney
 	ld bc, hMoneyTemp
 	farcall CompareMoney
@@ -118,11 +118,11 @@ MomBuysItem_DeductFunds:
 	ld de, 3 ; cost
 	add hl, de
 	ld a, [hli]
-	ld [hMoneyTemp], a
+	ldh [hMoneyTemp], a
 	ld a, [hli]
-	ld [hMoneyTemp + 1], a
+	ldh [hMoneyTemp + 1], a
 	ld a, [hli]
-	ld [hMoneyTemp + 2], a
+	ldh [hMoneyTemp + 2], a
 	ld de, wMomsMoney
 	ld bc, hMoneyTemp
 	farcall TakeMoney
@@ -208,33 +208,33 @@ INCLUDE "data/items/mom_phone.asm"
 
 _MomText_HiHowAreYou:
 	; Hi,  ! How are you?
-	text_jump UnknownText_0x1bc615
-	db "@"
+	text_far UnknownText_0x1bc615
+	text_end
 
 _MomText_FoundAnItem:
 	; I found a useful item shopping, so
-	text_jump UnknownText_0x1bc62a
-	db "@"
+	text_far UnknownText_0x1bc62a
+	text_end
 
 _MomText_BoughtWithYourMoney:
 	; I bought it with your money. Sorry!
-	text_jump UnknownText_0x1bc64e
-	db "@"
+	text_far UnknownText_0x1bc64e
+	text_end
 
 _MomText_ItsInPC:
 	; It's in your PC. You'll like it!
-	text_jump UnknownText_0x1bc673
-	db "@"
+	text_far UnknownText_0x1bc673
+	text_end
 
 _MomText_FoundADoll:
 	; While shopping today, I saw this adorable doll, so
-	text_jump UnknownText_0x1bc693
-	db "@"
+	text_far UnknownText_0x1bc693
+	text_end
 
 _MomText_ItsInRoom:
 	; It's in your room. You'll love it!
-	text_jump UnknownText_0x1bc6c7
-	db "@"
+	text_far UnknownText_0x1bc6c7
+	text_end
 
 	db 0 ; unused
 

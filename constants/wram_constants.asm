@@ -1,7 +1,12 @@
 ; wInputType:: ; c2c7
 AUTO_INPUT EQU $ff
 
-; wCurrentDexMode:: ; c7d4
+; wDebugFlags:: ; c2cc
+	const_def
+	const DEBUG_BATTLE_F
+	const DEBUG_FIELD_F
+
+; wCurDexMode:: ; c7d4
 	const_def
 	const DEXMODE_NEW
 	const DEXMODE_OLD
@@ -89,6 +94,13 @@ REMOVE_BOX        EQU 1
 DAY_CARE_WITHDRAW EQU 2
 DAY_CARE_DEPOSIT  EQU 3
 
+; wPlayerStepFlags:: ; d150
+	const_def 4
+	const PLAYERSTEP_MIDAIR_F   ; 4
+	const PLAYERSTEP_CONTINUE_F ; 5
+	const PLAYERSTEP_STOP_F     ; 6
+	const PLAYERSTEP_START_F    ; 7
+
 ; wInitListType:: ; d263
 INIT_ENEMYOT_LIST    EQU 1
 INIT_BAG_ITEM_LIST   EQU 2
@@ -121,14 +133,27 @@ PLAYERSPRITESETUP_RESET_ACTION_F    EQU 7
 ; wPlayerGender:: ; d472
 PLAYERGENDER_FEMALE_F EQU 0
 
+; wMapStatus:: ; d432
+	const_def
+	const MAPSTATUS_START  ; 0
+	const MAPSTATUS_ENTER  ; 1
+	const MAPSTATUS_HANDLE ; 2
+	const MAPSTATUS_DONE   ; 3
+
+; wMapEventStatus:: ; d433
+	const_def
+	const MAPEVENTS_ON  ; 0
+	const MAPEVENTS_OFF ; 1
+
 ; wScriptFlags:: ; d434
 SCRIPT_RUNNING EQU 2
 
 ; wScriptMode:: ; d437
-SCRIPT_OFF EQU 0
-SCRIPT_READ EQU 1
-SCRIPT_WAIT_MOVEMENT EQU 2
-SCRIPT_WAIT EQU 3
+	const_def
+	const SCRIPT_OFF
+	const SCRIPT_READ
+	const SCRIPT_WAIT_MOVEMENT
+	const SCRIPT_WAIT
 
 ; wSpawnAfterChampion:: ; d4b5
 SPAWN_LANCE EQU 1
@@ -146,7 +171,7 @@ SPAWN_RED   EQU 2
 
 ; wMapObjects:: ; d71e
 PLAYER_OBJECT EQU 0
-NUM_OBJECTS   EQU $10
+NUM_OBJECTS   EQU 16
 
 ; wStatusFlags:: ; d84c
 	const_def
@@ -232,27 +257,27 @@ CELEBIEVENT_FOREST_IS_RESTLESS_F EQU 2
 	const BIKEFLAGS_ALWAYS_ON_BIKE_F  ; 1
 	const BIKEFLAGS_DOWNHILL_F        ; 2
 
-; wDailyFlags:: ; dc1e
+; wDailyFlags1:: ; dc1e
 	const_def
-	const DAILYFLAGS_KURT_MAKING_BALLS_F             ; 0
-	const DAILYFLAGS_BUG_CONTEST_F                   ; 1
-	const DAILYFLAGS_FISH_SWARM_F                    ; 2
-	const DAILYFLAGS_TIME_CAPSULE_F                  ; 3
-	const DAILYFLAGS_ALL_FRUIT_TREES_F               ; 4
-	const DAILYFLAGS_GOT_SHUCKIE_TODAY_F             ; 5
-	const DAILYFLAGS_GOLDENROD_UNDERGROUND_BARGAIN_F ; 6
-	const DAILYFLAGS_TRAINER_HOUSE_F                 ; 7
+	const DAILYFLAGS1_KURT_MAKING_BALLS_F             ; 0
+	const DAILYFLAGS1_BUG_CONTEST_F                   ; 1
+	const DAILYFLAGS1_FISH_SWARM_F                    ; 2
+	const DAILYFLAGS1_TIME_CAPSULE_F                  ; 3
+	const DAILYFLAGS1_ALL_FRUIT_TREES_F               ; 4
+	const DAILYFLAGS1_GOT_SHUCKIE_TODAY_F             ; 5
+	const DAILYFLAGS1_GOLDENROD_UNDERGROUND_BARGAIN_F ; 6
+	const DAILYFLAGS1_TRAINER_HOUSE_F                 ; 7
 
-; wWeeklyFlags:: ; dc1f
+; wDailyFlags2:: ; dc1f
 	const_def
-	const WEEKLYFLAGS_MT_MOON_SQUARE_CLEFAIRY_F ; 0
-	const WEEKLYFLAGS_UNION_CAVE_LAPRAS_F ; 1
-	const WEEKLYFLAGS_GOLDENROD_UNDERGROUND_GOT_HAIRCUT_F ; 2
-	const WEEKLYFLAGS_GOLDENROD_DEPT_STORE_TM27_RETURN_F ; 3
-	const WEEKLYFLAGS_DAISYS_GROOMING_F ; 4
-	const WEEKLYFLAGS_INDIGO_PLATEAU_RIVAL_FIGHT_F ; 5
-	const WEEKLYFLAGS_DAILY_MOVE_TUTOR_F ; 6
-	const WEEKLYFLAGS_BUENAS_PASSWORD_F ; 7
+	const DAILYFLAGS2_MT_MOON_SQUARE_CLEFAIRY_F           ; 0
+	const DAILYFLAGS2_UNION_CAVE_LAPRAS_F                 ; 1
+	const DAILYFLAGS2_GOLDENROD_UNDERGROUND_GOT_HAIRCUT_F ; 2
+	const DAILYFLAGS2_GOLDENROD_DEPT_STORE_TM27_RETURN_F  ; 3
+	const DAILYFLAGS2_DAISYS_GROOMING_F                   ; 4
+	const DAILYFLAGS2_INDIGO_PLATEAU_RIVAL_FIGHT_F        ; 5
+	const DAILYFLAGS2_MOVE_TUTOR_F                        ; 6
+	const DAILYFLAGS2_BUENAS_PASSWORD_F                   ; 7
 
 ; wSwarmFlags:: ; dc20
 	const_def

@@ -117,8 +117,8 @@ _CardFlip:
 
 .PlayWithThreeCoinsText:
 	; Play with three coins?
-	text_jump UnknownText_0x1c5793
-	db "@"
+	text_far UnknownText_0x1c5793
+	text_end
 
 .DeductCoins:
 	ld a, [wCoins]
@@ -147,22 +147,22 @@ _CardFlip:
 	ld de, SFX_TRANSACTION
 	call PlaySFX
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call CardFlip_PrintCoinBalance
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call WaitSFX
 	call .Increment
 	ret
 
 .NotEnoughCoinsText:
 	; Not enough coins…
-	text_jump UnknownText_0x1c57ab
-	db "@"
+	text_far UnknownText_0x1c57ab
+	text_end
 
 .ChooseACard:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	lb bc, 12, 9
 	call CardFlip_FillGreenBox
@@ -172,13 +172,13 @@ _CardFlip:
 	call AddNTimes
 	ld [hl], CARDFLIP_LIGHT_ON
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld c, 20
 	call DelayFrames
 	hlcoord 2, 0
 	call PlaceCardFaceDown
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld c, 20
 	call DelayFrames
 	hlcoord 2, 6
@@ -190,7 +190,7 @@ _CardFlip:
 	ld [wCardFlipWhichCard], a
 .loop
 	call JoyTextDelay
-	ld a, [hJoyLast]
+	ldh a, [hJoyLast]
 	and A_BUTTON
 	jr nz, .next
 	ld de, SFX_KINESIS
@@ -234,15 +234,15 @@ _CardFlip:
 
 .ChooseACardText:
 	; Choose a card.
-	text_jump UnknownText_0x1c57be
-	db "@"
+	text_far UnknownText_0x1c57be
+	text_end
 
 .PlaceYourBet:
 	ld hl, .PlaceYourBetText
 	call CardFlip_UpdateCoinBalanceDisplay
 .betloop
 	call JoyTextDelay
-	ld a, [hJoyLast]
+	ldh a, [hJoyLast]
 	and A_BUTTON
 	jr nz, .betdone
 	call ChooseCard_HandleJoypad
@@ -256,12 +256,12 @@ _CardFlip:
 
 .PlaceYourBetText:
 	; Place your bet.
-	text_jump UnknownText_0x1c57ce
-	db "@"
+	text_far UnknownText_0x1c57ce
+	text_end
 
 .CheckTheCard:
 	xor a
-	ld [hVBlankCounter], a
+	ldh [hVBlankCounter], a
 	call CardFlip_UpdateCursorOAM
 	call WaitSFX
 	ld de, SFX_CHOOSE_A_CARD
@@ -311,7 +311,7 @@ _CardFlip:
 	jr c, .KeepTheCurrentDeck
 	call CardFlip_InitTilemap
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call CardFlip_ShuffleDeck
 	ld hl, .CardsShuffledText
 	call PrintText
@@ -327,13 +327,13 @@ _CardFlip:
 
 .PlayAgainText:
 	; Want to play again?
-	text_jump UnknownText_0x1c57df
-	db "@"
+	text_far UnknownText_0x1c57df
+	text_end
 
 .CardsShuffledText:
 	; The cards have been shuffled.
-	text_jump UnknownText_0x1c57f4
-	db "@"
+	text_far UnknownText_0x1c57f4
+	text_end
 
 .Quit:
 	ld hl, wJumptableIndex
@@ -396,7 +396,7 @@ GetCoordsOfChosenCard:
 
 PlaceCardFaceDown:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld de, .FaceDownCardTilemap
 	lb bc, 6, 5
 	call CardFlip_CopyToBox
@@ -412,7 +412,7 @@ PlaceCardFaceDown:
 
 CardFlip_DisplayCardFaceUp:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	push hl
 	push hl
 	; Flip the card face up.
@@ -458,7 +458,7 @@ CardFlip_DisplayCardFaceUp:
 	pop hl
 
 	; Pointless CGB check
-	ld a, [hCGB]
+	ldh a, [hCGB]
 	and a
 	ret z
 
@@ -519,7 +519,7 @@ CardFlip_PrintCoinBalance:
 
 CardFlip_InitTilemap:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	ld a, $29
@@ -607,7 +607,7 @@ CardFlip_ShiftDigitsLeftTwoPixels:
 
 CardFlip_BlankDiscardedCardSlot:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wCardFlipFaceUpCard]
 	ld e, a
 	ld d, 0
@@ -1114,13 +1114,13 @@ CardFlip_CheckWinCondition:
 
 .Text_Yeah:
 	; Yeah!
-	text_jump UnknownText_0x1c5813
-	db "@"
+	text_far UnknownText_0x1c5813
+	text_end
 
 .Text_Darn:
 	; Darn…
-	text_jump UnknownText_0x1c581a
-	db "@"
+	text_far UnknownText_0x1c581a
+	text_end
 
 .AddCoinPlaySFX:
 	ld a, [wCoins]
@@ -1327,10 +1327,10 @@ ChooseCard_HandleJoypad:
 
 CardFlip_UpdateCursorOAM:
 	call ClearSprites
-	ld a, [hCGB]
+	ldh a, [hCGB]
 	and a
 	jr nz, .skip
-	ld a, [hVBlankCounter]
+	ldh a, [hVBlankCounter]
 	and $4
 	ret nz
 
@@ -1560,7 +1560,7 @@ ENDM
 	dsprite  1, 0,   1, 0, $00, 0 | X_FLIP | Y_FLIP | PRIORITY
 
 CardFlip_InitAttrPals:
-	ld a, [hCGB]
+	ldh a, [hCGB]
 	and a
 	ret z
 
@@ -1594,16 +1594,16 @@ CardFlip_InitAttrPals:
 	ld a, $1
 	call CardFlip_FillBox
 
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, .palettes
 	ld de, wBGPals1
 	ld bc, 9 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 .palettes

@@ -4,19 +4,20 @@ INCLUDE "constants.asm"
 SECTION "Events", ROMX
 
 OverworldLoop::
-	xor a
+	xor a ; MAPSTATUS_START
 	ld [wMapStatus], a
 .loop
 	ld a, [wMapStatus]
 	ld hl, .jumps
 	rst JumpTable
 	ld a, [wMapStatus]
-	cp 3 ; done
+	cp MAPSTATUS_DONE
 	jr nz, .loop
 .done
 	ret
 
 .jumps
+; entries correspond to MAPSTATUS_* constants
 	dw StartMap
 	dw EnterMap
 	dw HandleMap
@@ -115,13 +116,13 @@ EnterMap:
 	farcall RunMapSetupScript
 	call DisableEvents
 
-	ld a, [hMapEntryMethod]
+	ldh a, [hMapEntryMethod]
 	cp MAPSETUP_CONNECTION
 	jr nz, .dont_enable
 	call EnableEvents
 .dont_enable
 
-	ld a, [hMapEntryMethod]
+	ldh a, [hMapEntryMethod]
 	cp MAPSETUP_RELOADMAP
 	jr nz, .dontresetpoison
 	xor a
@@ -129,8 +130,8 @@ EnterMap:
 .dontresetpoison
 
 	xor a ; end map entry
-	ld [hMapEntryMethod], a
-	ld a, 2 ; HandleMap
+	ldh [hMapEntryMethod], a
+	ld a, MAPSTATUS_HANDLE
 	ld [wMapStatus], a
 	ret
 
@@ -147,7 +148,7 @@ HandleMap:
 
 ; Not immediately entering a connected map will cause problems.
 	ld a, [wMapStatus]
-	cp 2 ; HandleMap
+	cp MAPSTATUS_HANDLE
 	ret nz
 
 	call HandleMapObjects
@@ -163,6 +164,7 @@ MapEvents:
 	ret
 
 .jumps
+; entries correspond to MAPEVENTS_* constants
 	dw .events
 	dw .no_events
 
@@ -193,7 +195,7 @@ NextOverworldFrame:
 
 HandleMapTimeAndJoypad:
 	ld a, [wMapEventStatus]
-	cp 1 ; no events
+	cp MAPEVENTS_OFF
 	ret z
 
 	call UpdateTime
@@ -215,26 +217,26 @@ HandleMapBackground:
 
 CheckPlayerState:
 	ld a, [wPlayerStepFlags]
-	bit 5, a ; in the middle of step
+	bit PLAYERSTEP_CONTINUE_F, a
 	jr z, .events
-	bit 6, a ; stopping step
+	bit PLAYERSTEP_STOP_F, a
 	jr z, .noevents
-	bit 4, a ; in midair
+	bit PLAYERSTEP_MIDAIR_F, a
 	jr nz, .noevents
 	call EnableEvents
 .events
-	ld a, 0 ; events
+	ld a, MAPEVENTS_ON
 	ld [wMapEventStatus], a
 	ret
 
 .noevents
-	ld a, 1 ; no events
+	ld a, MAPEVENTS_OFF
 	ld [wMapEventStatus], a
 	ret
 
 _CheckObjectEnteringVisibleRange:
 	ld hl, wPlayerStepFlags
-	bit 6, [hl]
+	bit PLAYERSTEP_STOP_F, [hl]
 	ret z
 	farcall CheckObjectEnteringVisibleRange
 	ret
@@ -248,7 +250,7 @@ PlayerEvents:
 
 	call Dummy_CheckScriptFlags3Bit5 ; This is a waste of time
 
-	call CheckTrainerBattle3
+	call CheckTrainerBattle_GetPlayerEvent
 	jr c, .ok
 
 	call CheckTileEvent
@@ -289,10 +291,10 @@ PlayerEvents:
 	scf
 	ret
 
-CheckTrainerBattle3:
+CheckTrainerBattle_GetPlayerEvent:
 	nop
 	nop
-	call CheckTrainerBattle2
+	call CheckTrainerBattle
 	jr nc, .nope
 
 	ld a, PLAYEREVENT_SEENBYTRAINER
@@ -401,7 +403,7 @@ Dummy_CheckScriptFlags3Bit5:
 	ret
 
 RunSceneScript:
-	ld a, [wCurrMapSceneScriptCount]
+	ld a, [wCurMapSceneScriptCount]
 	and a
 	jr z, .nope
 
@@ -412,7 +414,7 @@ RunSceneScript:
 
 	ld e, a
 	ld d, 0
-	ld hl, wCurrMapSceneScriptsPointer
+	ld hl, wCurMapSceneScriptsPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -512,7 +514,7 @@ OWPlayerInput:
 	ret
 
 CheckAPressOW:
-	ld a, [hJoyPressed]
+	ldh a, [hJoyPressed]
 	and A_BUTTON
 	ret z
 	call TryObjectEvent
@@ -539,14 +541,14 @@ TryObjectEvent:
 
 .IsObject:
 	call PlayTalkObject
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	call GetObjectStruct
 	ld hl, OBJECT_MAP_OBJECT_INDEX
 	add hl, bc
 	ld a, [hl]
-	ld [hLastTalked], a
+	ldh [hLastTalked], a
 
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 	call GetMapObject
 	ld hl, MAPOBJECT_COLOR
 	add hl, bc
@@ -809,9 +811,9 @@ PlayerMovement:
 
 CheckMenuOW:
 	xor a
-	ld [hMenuReturn], a
-	ld [hMenuReturn + 1], a
-	ld a, [hJoyPressed]
+	ldh [hMenuReturn], a
+	ldh [hMenuReturn + 1], a
+	ldh a, [hJoyPressed]
 
 	bit SELECT_F, a
 	jr nz, .Select
@@ -1239,7 +1241,7 @@ ChooseWildEncounter_BugContest::
 	ld c, a
 	inc c
 	call Random
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	call SimpleDivide
 	add d
 
@@ -1260,7 +1262,7 @@ TryWildEncounter_BugContest:
 	farcall ApplyMusicEffectOnEncounterRate
 	farcall ApplyCleanseTagEffectOnEncounterRate
 	call Random
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	cp b
 	ret c
 	ld a, 1
@@ -1351,7 +1353,7 @@ HandleCmdQueue::
 	ld hl, wCmdQueue
 	xor a
 .loop
-	ld [hMapObjectIndexBuffer], a
+	ldh [hMapObjectIndexBuffer], a
 	ld a, [hl]
 	and a
 	jr z, .skip
@@ -1364,7 +1366,7 @@ HandleCmdQueue::
 .skip
 	ld de, CMDQUEUE_ENTRY_SIZE
 	add hl, de
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	inc a
 	cp CMDQUEUE_CAPACITY
 	jr nz, .loop
@@ -1505,7 +1507,7 @@ CmdQueue_Type4:
 	dw .one
 
 .zero
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	ld hl, 4
 	add hl, bc
 	ld [hl], a
@@ -1521,24 +1523,24 @@ CmdQueue_Type4:
 	jr z, .add
 	ld hl, 2
 	add hl, bc
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	sub [hl]
-	ld [hSCY], a
+	ldh [hSCY], a
 	ret
 
 .add
 	ld hl, 2
 	add hl, bc
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	add [hl]
-	ld [hSCY], a
+	ldh [hSCY], a
 	ret
 
 .finish
 	ld hl, 4
 	add hl, bc
 	ld a, [hl]
-	ld [hSCY], a
+	ldh [hSCY], a
 	call _DelCmdQueue
 	ret
 

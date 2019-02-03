@@ -1,4 +1,3 @@
-
 BattleCommand_Transform:
 ; transform
 
@@ -30,7 +29,7 @@ BattleCommand_Transform:
 	call ResetActorDisable
 	ld hl, wBattleMonSpecies
 	ld de, wEnemyMonSpecies
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	jr nz, .got_mon_species
 	ld hl, wEnemyMonSpecies
@@ -46,7 +45,7 @@ BattleCommand_Transform:
 	inc de
 	ld bc, NUM_MOVES
 	call CopyBytes
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	jr z, .mimic_enemy_backup
 	ld a, [de]
@@ -112,7 +111,7 @@ BattleCommand_Transform:
 	call BattleSideCopy
 	call _CheckBattleScene
 	jr c, .mimic_anims
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	ld a, [wPlayerMinimized]
 	jr z, .got_byte
@@ -137,3 +136,18 @@ BattleCommand_Transform:
 	call nz, LoadAnim
 	ld hl, TransformedText
 	jp StdBattleTextBox
+
+BattleSideCopy:
+; Copy bc bytes from hl to de if it's the player's turn.
+; Copy bc bytes from de to hl if it's the enemy's turn.
+	ldh a, [hBattleTurn]
+	and a
+	jr z, .copy
+
+; Swap hl and de
+	push hl
+	ld h, d
+	ld l, e
+	pop de
+.copy
+	jp CopyBytes

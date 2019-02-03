@@ -46,7 +46,7 @@ WritePartyMenuTilemap:
 	push af
 	set NO_TEXT_SCROLL, [hl]
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, " "
@@ -84,7 +84,7 @@ PlacePartyNicknames:
 	and a
 	jr z, .end
 	ld c, a
-	ld b, $0
+	ld b, 0
 .loop
 	push bc
 	push hl
@@ -119,7 +119,7 @@ PlacePartyHPBar:
 	and a
 	ret z
 	ld c, a
-	ld b, $0
+	ld b, 0
 	hlcoord 11, 2
 .loop
 	push bc
@@ -185,7 +185,7 @@ PlacePartyMenuHPDigits:
 	and a
 	ret z
 	ld c, a
-	ld b, $0
+	ld b, 0
 	hlcoord 13, 1
 .loop
 	push bc
@@ -590,7 +590,7 @@ InitPartyMenuGFX:
 	ret z
 	ld c, a
 	xor a
-	ld [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndexBuffer], a
 .loop
 	push bc
 	push hl
@@ -598,9 +598,9 @@ InitPartyMenuGFX:
 	ld a, BANK(LoadMenuMonIcon)
 	ld e, MONICON_PARTYMENU
 	rst FarCall
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	inc a
-	ld [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndexBuffer], a
 	pop hl
 	pop bc
 	dec c
@@ -682,7 +682,7 @@ PartyMenuSelect:
 	cp b
 	jr z, .exitmenu ; CANCEL
 	ld [wPartyMenuCursor], a
-	ld a, [hJoyLast]
+	ldh a, [hJoyLast]
 	ld b, a
 	bit B_BUTTON_F, b
 	jr nz, .exitmenu ; B button
@@ -805,53 +805,53 @@ PrintPartyMenuActionText:
 
 .Text_RecoveredSomeHP:
 	; recovered @ HP!
-	text_jump UnknownText_0x1bc0a2
-	db "@"
+	text_far UnknownText_0x1bc0a2
+	text_end
 
 .Text_CuredOfPoison:
 	; 's cured of poison.
-	text_jump UnknownText_0x1bc0bb
-	db "@"
+	text_far UnknownText_0x1bc0bb
+	text_end
 
 .Text_RidOfParalysis:
 	; 's rid of paralysis.
-	text_jump UnknownText_0x1bc0d2
-	db "@"
+	text_far UnknownText_0x1bc0d2
+	text_end
 
 .Text_BurnWasHealed:
 	; 's burn was healed.
-	text_jump UnknownText_0x1bc0ea
-	db "@"
+	text_far UnknownText_0x1bc0ea
+	text_end
 
 .Text_Defrosted:
 	; was defrosted.
-	text_jump UnknownText_0x1bc101
-	db "@"
+	text_far UnknownText_0x1bc101
+	text_end
 
 .Text_WokeUp:
 	; woke up.
-	text_jump UnknownText_0x1bc115
-	db "@"
+	text_far UnknownText_0x1bc115
+	text_end
 
 .Text_HealthReturned:
 	; 's health returned.
-	text_jump UnknownText_0x1bc123
-	db "@"
+	text_far UnknownText_0x1bc123
+	text_end
 
 .Text_Revitalized:
 	; is revitalized.
-	text_jump UnknownText_0x1bc13a
-	db "@"
+	text_far UnknownText_0x1bc13a
+	text_end
 
 .Text_GrewToLevel:
 	; grew to level @ !@ @
-	text_jump UnknownText_0x1bc14f
-	db "@"
+	text_far UnknownText_0x1bc14f
+	text_end
 
 .Text_CameToItsSenses:
 	; came to its senses.
-	text_jump UnknownText_0x1bc16e
-	db "@"
+	text_far UnknownText_0x1bc16e
+	text_end
 
 .PrintText:
 	ld e, a

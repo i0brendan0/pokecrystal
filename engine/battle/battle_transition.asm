@@ -10,11 +10,11 @@ BATTLETRANSITION_SQUARE EQUS "\"8\"" ; $fe
 
 DoBattleTransition:
 	call .InitGFX
-	ld a, [rBGP]
+	ldh a, [rBGP]
 	ld [wBGP], a
-	ld a, [rOBP0]
+	ldh a, [rOBP0]
 	ld [wOBP0], a
-	ld a, [rOBP1]
+	ldh a, [rOBP1]
 	ld [wOBP1], a
 	call DelayFrame
 	ld hl, hVBlank
@@ -31,10 +31,10 @@ DoBattleTransition:
 	jr .loop
 
 .done
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld hl, wBGPals1
 	ld bc, 8 palettes
@@ -42,22 +42,22 @@ DoBattleTransition:
 	call ByteFill
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld a, %11111111
 	ld [wBGP], a
 	call DmgToCgbBGPals
 	call DelayFrame
 	xor a
-	ld [hLCDCPointer], a
-	ld [hLYOverrideStart], a
-	ld [hLYOverrideEnd], a
-	ld [hSCY], a
+	ldh [hLCDCPointer], a
+	ldh [hLYOverrideStart], a
+	ldh [hLYOverrideEnd], a
+	ldh [hSCY], a
 
 	ld a, 1 ; unnecessary bankswitch?
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	pop af
-	ld [hVBlank], a
+	ldh [hVBlank], a
 	call DelayFrame
 	ret
 
@@ -77,10 +77,10 @@ DoBattleTransition:
 
 .resume
 	ld a, SCREEN_HEIGHT_PX
-	ld [hWY], a
+	ldh [hWY], a
 	call DelayFrame
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld hl, wJumptableIndex
 	xor a
 	ld [hli], a
@@ -104,10 +104,10 @@ LoadTrainerBattlePokeballTiles:
 	ld c, 2
 	call Request2bpp
 
-	ld a, [rVBK]
+	ldh a, [rVBK]
 	push af
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 
 	ld de, TrainerBattlePokeballTiles
 	ld hl, vTiles3 tile BATTLETRANSITION_SQUARE
@@ -116,14 +116,14 @@ LoadTrainerBattlePokeballTiles:
 	call Request2bpp
 
 	pop af
-	ld [rVBK], a
+	ldh [rVBK], a
 	ret
 
 ConvertTrainerBattlePokeballTilesTo2bpp:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wDecompressScratch)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	push hl
 	ld hl, wDecompressScratch
 	ld bc, $28 tiles
@@ -138,11 +138,11 @@ ConvertTrainerBattlePokeballTilesTo2bpp:
 
 	pop hl
 	ld de, wDecompressScratch
-	ld b, BANK(ConvertTrainerBattlePokeballTilesTo2bpp) ; BANK(@)
+	ld b, BANK(@)
 	ld c, $28
 	call Request2bpp
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 TrainerBattlePokeballTiles:
@@ -258,7 +258,7 @@ StartTrainerBattle_SetUpBGMap:
 	call StartTrainerBattle_NextScene
 	xor a
 	ld [wcf64], a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 StartTrainerBattle_Flash:
@@ -294,33 +294,33 @@ StartTrainerBattle_Flash:
 	ret
 
 .pals
-	db %11111001 ; 3321
-	db %11111110 ; 3332
-	db %11111111 ; 3333
-	db %11111110 ; 3332
-	db %11111001 ; 3321
-	db %11100100 ; 3210
-	db %10010000 ; 2100
-	db %01000000 ; 1000
-	db %00000000 ; 0000
-	db %01000000 ; 1000
-	db %10010000 ; 2100
-	db %11100100 ; 3210
-	db %00000001 ; 0001
+	dc 3, 3, 2, 1
+	dc 3, 3, 3, 2
+	dc 3, 3, 3, 3
+	dc 3, 3, 3, 2
+	dc 3, 3, 2, 1
+	dc 3, 2, 1, 0
+	dc 2, 1, 0, 0
+	dc 1, 0, 0, 0
+	dc 0, 0, 0, 0
+	dc 1, 0, 0, 0
+	dc 2, 1, 0, 0
+	dc 3, 2, 1, 0
+	dc 0, 0, 0, 1
 
 StartTrainerBattle_SetUpForWavyOutro:
 	farcall Function5602
 	ld a, BANK(wLYOverrides)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	call StartTrainerBattle_NextScene
 
-	ld a, rSCX - $ff00
-	ld [hLCDCPointer], a
+	ld a, LOW(rSCX)
+	ldh [hLCDCPointer], a
 	xor a
-	ld [hLYOverrideStart], a
+	ldh [hLYOverrideStart], a
 	ld a, $90
-	ld [hLYOverrideEnd], a
+	ldh [hLYOverrideEnd], a
 	xor a
 	ld [wcf64], a
 	ld [wcf65], a
@@ -369,7 +369,7 @@ StartTrainerBattle_SineWave:
 StartTrainerBattle_SetUpForSpinOutro:
 	farcall Function5602
 	ld a, BANK(wLYOverrides)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call StartTrainerBattle_NextScene
 	xor a
 	ld [wcf64], a
@@ -377,7 +377,7 @@ StartTrainerBattle_SetUpForSpinOutro:
 
 StartTrainerBattle_SpinToBlack:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wcf64]
 	ld e, a
 	ld d, 0
@@ -391,7 +391,7 @@ endr
 	ld [wcf65], a
 	call .load
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call DelayFrame
 	call DelayFrame
 	ld hl, wcf64
@@ -400,12 +400,12 @@ endr
 
 .end
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call DelayFrame
 	call DelayFrame
 	call DelayFrame
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, BATTLETRANSITION_FINISH
 	ld [wJumptableIndex], a
 	ret
@@ -511,12 +511,12 @@ ENDM
 StartTrainerBattle_SetUpForRandomScatterOutro:
 	farcall Function5602
 	ld a, BANK(wLYOverrides)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call StartTrainerBattle_NextScene
 	ld a, $10
 	ld [wcf64], a
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 StartTrainerBattle_SpeckleToBlack:
@@ -536,12 +536,12 @@ StartTrainerBattle_SpeckleToBlack:
 
 .done
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call DelayFrame
 	call DelayFrame
 	call DelayFrame
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, BATTLETRANSITION_FINISH
 	ld [wJumptableIndex], a
 	ret
@@ -583,7 +583,7 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	jp z, .nextscene ; don't need to be here if wild
 
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0, wAttrMap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	inc b
@@ -640,11 +640,11 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	dec b
 	jr nz, .loop2
 
-	ld a, [hCGB]
+	ldh a, [hCGB]
 	and a
 	jr nz, .cgb
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call DelayFrame
 	call DelayFrame
 	jr .nextscene
@@ -657,10 +657,10 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	jr nz, .daytime
 	ld hl, .nightpals
 .daytime
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call .copypals
 	push hl
 	ld de, wBGPals1 palette PAL_BG_TEXT
@@ -671,9 +671,9 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	ld bc, 1 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, $1
-	ld [hCGBPalUpdate], a
+	ldh [hCGBPalUpdate], a
 	call DelayFrame
 	call BattleStart_CopyTilemapAtOnce
 
@@ -713,28 +713,32 @@ INCLUDE "gfx/overworld/trainer_battle_nite.pal"
 	ret
 
 PokeBallTransition:
-	db %00000011, %11000000
-	db %00001111, %11110000
-	db %00111100, %00111100
-	db %00110000, %00001100
-	db %01100000, %00000110
-	db %01100011, %11000110
-	db %11000110, %01100011
-	db %11111100, %00111111
-	db %11111100, %00111111
-	db %11000110, %01100011
-	db %01100011, %11000110
-	db %01100000, %00000110
-	db %00110000, %00001100
-	db %00111100, %00111100
-	db %00001111, %11110000
-	db %00000011, %11000000
+; 16x16 overlay of a Poke Ball
+pusho
+opt b.X ; . = 0, X = 1
+	bigdw %......XXXX......
+	bigdw %....XXXXXXXX....
+	bigdw %..XXXX....XXXX..
+	bigdw %..XX........XX..
+	bigdw %.XX..........XX.
+	bigdw %.XX...XXXX...XX.
+	bigdw %XX...XX..XX...XX
+	bigdw %XXXXXX....XXXXXX
+	bigdw %XXXXXX....XXXXXX
+	bigdw %XX...XX..XX...XX
+	bigdw %.XX...XXXX...XX.
+	bigdw %.XX..........XX.
+	bigdw %..XX........XX..
+	bigdw %..XXXX....XXXX..
+	bigdw %....XXXXXXXX....
+	bigdw %......XXXX......
+popo
 
 WipeLYOverrides:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wLYOverrides)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld hl, wLYOverrides
 	call .wipe
@@ -742,7 +746,7 @@ WipeLYOverrides:
 	call .wipe
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 .wipe
@@ -777,7 +781,7 @@ StartTrainerBattle_ZoomToBlack:
 	inc de
 	ld h, a
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call .Copy
 	call WaitBGMap
 	jr .loop
@@ -823,8 +827,8 @@ ENDM
 
 Unreferenced_Function8c7c9:
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call WaitBGMap
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret

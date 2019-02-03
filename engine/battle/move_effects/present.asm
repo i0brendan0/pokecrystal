@@ -54,12 +54,12 @@ BattleCommand_Present:
 	call AnimateCurrentMove
 	call BattleCommand_SwitchTurn
 	ld hl, AICheckPlayerMaxHP
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	jr z, .got_hp_fn_pointer
 	ld hl, AICheckEnemyMaxHP
 .got_hp_fn_pointer
-	ld a, BANK(AICheckPlayerMaxHP)
+	ld a, BANK(AICheckPlayerMaxHP) ; aka BANK(AICheckEnemyMaxHP)
 	rst FarCall
 	jr c, .already_fully_healed
 

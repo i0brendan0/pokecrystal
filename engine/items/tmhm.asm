@@ -1,9 +1,9 @@
 TMHMPocket:
 	ld a, $1
-	ld [hInMenu], a
+	ldh [hInMenu], a
 	call TMHM_PocketLoop
 	ld a, $0
-	ld [hInMenu], a
+	ldh [hInMenu], a
 	ret nc
 	call PlaceHollowCursor
 	call WaitBGMap
@@ -168,27 +168,27 @@ TeachTMHM:
 
 Text_BootedTM:
 	; Booted up a TM.
-	text_jump UnknownText_0x1c0373
-	db "@"
+	text_far UnknownText_0x1c0373
+	text_end
 
 Text_BootedHM:
 	; Booted up an HM.
-	text_jump UnknownText_0x1c0384
-	db "@"
+	text_far UnknownText_0x1c0384
+	text_end
 
 Text_ItContained:
 	; It contained @ . Teach @ to a #MON?
-	text_jump UnknownText_0x1c0396
-	db "@"
+	text_far UnknownText_0x1c0396
+	text_end
 
 Text_TMHMNotCompatible:
 	; is not compatible with @ . It can't learn @ .
-	text_jump UnknownText_0x1c03c2
-	db "@"
+	text_far UnknownText_0x1c03c2
+	text_end
 
 TMHM_PocketLoop:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call TMHM_DisplayPocketItems
 	ld a, 2
 	ld [w2DMenuCursorInitY], a
@@ -227,7 +227,7 @@ TMHM_JoypadLoop:
 	dec a
 	ld [wTMHMPocketCursor], a
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [w2DMenuFlags2]
 	bit 7, a
 	jp nz, TMHM_ScrollPocket
@@ -499,13 +499,13 @@ Unreferenced_Function2cadf:
 
 .NoRoomText:
 	; You have no room for any more @ S.
-	text_jump UnknownText_0x1c03fa
-	db "@"
+	text_far UnknownText_0x1c03fa
+	text_end
 
 .ReceivedText:
 	; You received @ !
-	text_jump UnknownText_0x1c0421
-	db "@"
+	text_far UnknownText_0x1c0421
+	text_end
 
 .CheckHaveRoomForTMHM:
 	ld a, [wTempTMHM]
@@ -557,18 +557,3 @@ CountTMsHMs:
 	ld a, b
 	ld [wTempTMHM], a
 	ret
-
-PrintMoveDesc:
-	push hl
-	ld hl, MoveDescriptions
-	ld a, [wCurSpecies]
-	dec a
-	ld c, a
-	ld b, 0
-	add hl, bc
-	add hl, bc
-	ld a, [hli]
-	ld e, a
-	ld d, [hl]
-	pop hl
-	jp PlaceString

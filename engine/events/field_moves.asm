@@ -38,7 +38,7 @@ ShakeHeadbuttTree:
 	add hl, bc
 	ld [hl], FIELDMOVE_TREE
 	ld a, 36 * SPRITEOAMSTRUCT_LENGTH
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call HideHeadbuttTree
 	ld a, 32
@@ -53,7 +53,7 @@ ShakeHeadbuttTree:
 	jr z, .done
 	dec [hl]
 	ld a, 36 * SPRITEOAMSTRUCT_LENGTH
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call DelayFrame
 	jr .loop
@@ -62,7 +62,7 @@ ShakeHeadbuttTree:
 	call OverworldTextModeSwitch
 	call WaitBGMap
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	farcall ClearSpriteAnims
 	ld hl, wVirtualOAMSprite36
 	ld bc, wVirtualOAMEnd - wVirtualOAMSprite36
@@ -80,7 +80,7 @@ INCBIN "gfx/overworld/headbutt_tree.2bpp"
 
 HideHeadbuttTree:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wPlayerDirection]
 	and %00001100
 	srl a
@@ -101,7 +101,7 @@ HideHeadbuttTree:
 	ld [hld], a
 	call WaitBGMap
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 TreeRelativeLocationTable:
@@ -126,7 +126,7 @@ OWCutAnimation:
 	bit 7, a
 	jr nz, .finish
 	ld a, 36 * SPRITEOAMSTRUCT_LENGTH
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	callfar DoNextFrameForAllSprites
 	call OWCutJumptable
 	call DelayFrame
@@ -205,7 +205,7 @@ Cut_SpawnAnimateLeaves:
 
 Cut_StartWaiting:
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 ; Cut_WaitAnimSFX
 	ld hl, wJumptableIndex
 	inc [hl]
@@ -328,7 +328,7 @@ FlyFromAnim:
 	bit 7, a
 	jr nz, .exit
 	ld a, 0 * SPRITEOAMSTRUCT_LENGTH
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	callfar DoNextFrameForAllSprites
 	call FlyFunction_FrameTimer
 	call DelayFrame
@@ -365,7 +365,7 @@ FlyToAnim:
 	bit 7, a
 	jr nz, .exit
 	ld a, 0 * SPRITEOAMSTRUCT_LENGTH
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	callfar DoNextFrameForAllSprites
 	call FlyFunction_FrameTimer
 	call DelayFrame

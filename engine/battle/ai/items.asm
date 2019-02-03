@@ -520,7 +520,7 @@ AIUpdateHUD:
 	call UpdateEnemyMonInParty
 	farcall UpdateEnemyHUD
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld hl, wEnemyItemState
 	dec [hl]
 	scf
@@ -671,7 +671,7 @@ AI_Switch:
 	ld hl, wEnemySubStatus4
 	res SUBSTATUS_RAGE, [hl]
 	xor a
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 	callfar PursuitSwitch
 
 	push af
@@ -708,8 +708,8 @@ AI_Switch:
 	ret
 
 TextJump_EnemyWithdrew:
-	text_jump Text_EnemyWithdrew
-	db "@"
+	text_far Text_EnemyWithdrew
+	text_end
 
 Function384d5: ; This appears to be unused
 	call AIUsedItemSound
@@ -755,17 +755,17 @@ EnemyUsedDireHit:
 	jp PrintText_UsedItemOn_AND_AIUpdateHUD
 
 Function3851e: ; This appears to be unused
-	ld [hDivisor], a
+	ldh [hDivisor], a
 	ld hl, wEnemyMonMaxHP
 	ld a, [hli]
-	ld [hDividend], a
+	ldh [hDividend], a
 	ld a, [hl]
-	ld [hDividend + 1], a
+	ldh [hDividend + 1], a
 	ld b, 2
 	call Divide
-	ld a, [hQuotient + 2]
+	ldh a, [hQuotient + 3]
 	ld c, a
-	ld a, [hQuotient + 1]
+	ldh a, [hQuotient + 2]
 	ld b, a
 	ld hl, wEnemyMonHP + 1
 	ld a, [hld]
@@ -806,7 +806,7 @@ EnemyUsedXItem:
 	push bc
 	call PrintText_UsedItemOn
 	pop bc
-	farcall CheckIfStatCanBeRaised
+	farcall RaiseStat
 	jp AIUpdateHUD
 
 ; Parameter
@@ -828,5 +828,5 @@ PrintText_UsedItemOn:
 	jp PrintText
 
 TextJump_EnemyUsedOn:
-	text_jump Text_EnemyUsedOn
-	db "@"
+	text_far Text_EnemyUsedOn
+	text_end

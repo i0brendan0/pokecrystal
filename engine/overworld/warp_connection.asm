@@ -18,7 +18,7 @@ InitCommandQueue:
 EnterMapConnection:
 ; Return carry if a connection has been entered.
 	ld a, [wPlayerStepDirection]
-	and a
+	and a ; DOWN
 	jp z, .south
 	cp UP
 	jp z, .north
@@ -176,7 +176,7 @@ LoadWarpData:
 ; MOUNT_MOON_SQUARE and TIN_TOWER_ROOF are outdoor maps within indoor maps.
 ; Dig and Escape Rope should not take you to them.
 	ld a, [wPrevMapGroup]
-	cp GROUP_MOUNT_MOON_SQUARE ; GROUP_TIN_TOWER_ROOF
+	cp GROUP_MOUNT_MOON_SQUARE ; aka GROUP_TIN_TOWER_ROOF
 	jr nz, .not_mt_moon_or_tin_tower
 	ld a, [wPrevMapNumber]
 	cp MAP_MOUNT_MOON_SQUARE
@@ -242,14 +242,14 @@ LoadMapTimeOfDay:
 	ld [wBGMapAnchor + 1], a
 	xor a ; LOW(vBGMap0)
 	ld [wBGMapAnchor], a
-	ld [hSCY], a
-	ld [hSCX], a
+	ldh [hSCY], a
+	ldh [hSCX], a
 	farcall ApplyBGMapAnchorToObjects
 
-	ld a, [rVBK]
+	ldh a, [rVBK]
 	push af
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 
 	xor a
 	ld bc, vBGMap1 - vBGMap0
@@ -257,7 +257,7 @@ LoadMapTimeOfDay:
 	call ByteFill
 
 	pop af
-	ld [rVBK], a
+	ldh [rVBK], a
 
 	ld a, "■"
 	ld bc, vBGMap1 - vBGMap0
@@ -268,13 +268,13 @@ LoadMapTimeOfDay:
 .PushAttrMap:
 	decoord 0, 0
 	call .copy
-	ld a, [hCGB]
+	ldh a, [hCGB]
 	and a
 	ret z
 
 	decoord 0, 0, wAttrMap
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 .copy
 	hlbgcoord 0, 0
 	ld c, SCREEN_WIDTH
@@ -293,16 +293,16 @@ LoadMapTimeOfDay:
 	dec b
 	jr nz, .row
 	ld a, $0
-	ld [rVBK], a
+	ldh [rVBK], a
 	ret
 
 LoadGraphics:
 	call LoadTileset
 	call LoadTilesetGFX
 	xor a
-	ld [hMapAnims], a
+	ldh [hMapAnims], a
 	xor a
-	ld [hTileAnimFrame], a
+	ldh [hTileAnimFrame], a
 	farcall RefreshSprites
 	call LoadFontsExtra
 	farcall LoadOverworldFont

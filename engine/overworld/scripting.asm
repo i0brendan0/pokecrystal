@@ -407,14 +407,14 @@ Script_waitbutton:
 Script_buttonsound:
 ; script command 0x55
 
-	ld a, [hOAMUpdate]
+	ldh a, [hOAMUpdate]
 	push af
 	ld a, $1
-	ld [hOAMUpdate], a
+	ldh [hOAMUpdate], a
 	call WaitBGMap
 	call ButtonSound
 	pop af
-	ld [hOAMUpdate], a
+	ldh [hOAMUpdate], a
 	ret
 
 Script_yesorno:
@@ -511,7 +511,7 @@ Script_verbosegiveitem:
 	call Script_giveitem
 	call CurItemName
 	ld de, wStringBuffer1
-	ld a, 1
+	ld a, MEM_BUFFER_1
 	call CopyConvertedText
 	ld b, BANK(GiveItemScript)
 	ld de, GiveItemScript
@@ -536,15 +536,15 @@ GiveItemScript:
 	end
 
 ReceivedItemText:
-	text_jump UnknownText_0x1c4719
-	db "@"
+	text_far UnknownText_0x1c4719
+	text_end
 
 Script_verbosegiveitem2:
 ; script command 0x9f
 ; parameters: item, var
 
 	call GetScriptByte
-	cp -1
+	cp ITEM_FROM_MEM
 	jr nz, .ok
 	ld a, [wScriptVar]
 .ok
@@ -562,7 +562,7 @@ Script_verbosegiveitem2:
 	ld [wScriptVar], a
 	call CurItemName
 	ld de, wStringBuffer1
-	ld a, 1
+	ld a, MEM_BUFFER_1
 	call CopyConvertedText
 	ld b, BANK(GiveItemScript)
 	ld de, GiveItemScript
@@ -628,12 +628,12 @@ CurItemName:
 	ret
 
 PutItemInPocketText:
-	text_jump UnknownText_0x1c472c
-	db "@"
+	text_far UnknownText_0x1c472c
+	text_end
 
 PocketIsFullText:
-	text_jump UnknownText_0x1c474b
-	db "@"
+	text_far UnknownText_0x1c474b
+	text_end
 
 Script_pokemart:
 ; script command 0x94
@@ -933,7 +933,7 @@ Script_setlasttalked:
 
 	call GetScriptByte
 	call GetScriptObject
-	ld [hLastTalked], a
+	ldh [hLastTalked], a
 	ret
 
 Script_applymovement:
@@ -977,25 +977,25 @@ Script_applymovement2:
 ; parameters: data
 ; apply movement to last talked
 
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 	ld c, a
 	jp ApplyMovement
 
 Script_faceplayer:
 ; script command 0x6b
 
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 	and a
 	ret z
 	ld d, $0
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 	ld e, a
 	farcall GetRelativeFacing
 	ld a, d
 	add a
 	add a
 	ld e, a
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 	ld d, a
 	call ApplyObjectFacing
 	ret
@@ -1008,14 +1008,14 @@ Script_faceobject:
 	call GetScriptObject
 	cp LAST_TALKED
 	jr c, .ok
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 .ok
 	ld e, a
 	call GetScriptByte
 	call GetScriptObject
 	cp LAST_TALKED
 	jr nz, .ok2
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 .ok2
 	ld d, a
 	push de
@@ -1038,7 +1038,7 @@ Script_turnobject:
 	call GetScriptObject
 	cp LAST_TALKED
 	jr nz, .ok
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 .ok
 	ld d, a
 	call GetScriptByte
@@ -1113,7 +1113,7 @@ Script_appear:
 	call GetScriptByte
 	call GetScriptObject
 	call _CopyObjectStruct
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	ld b, 0 ; clear
 	call ApplyEventActionAppearDisappear
 	ret
@@ -1126,10 +1126,10 @@ Script_disappear:
 	call GetScriptObject
 	cp LAST_TALKED
 	jr nz, .ok
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 .ok
 	call DeleteObjectStruct
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	ld b, 1 ; set
 	call ApplyEventActionAppearDisappear
 	farcall _UpdateSprites
@@ -1198,7 +1198,7 @@ Script_writeobjectxy:
 	call GetScriptObject
 	cp LAST_TALKED
 	jr nz, .ok
-	ld a, [hLastTalked]
+	ldh a, [hLastTalked]
 .ok
 	ld b, a
 	farcall WriteObjectXY
@@ -1222,7 +1222,7 @@ Script_loademote:
 ; parameters: bubble
 
 	call GetScriptByte
-	cp -1
+	cp EMOTE_FROM_MEM
 	jr nz, .not_var_emote
 	ld a, [wScriptVar]
 .not_var_emote
@@ -1240,7 +1240,7 @@ Script_showemote:
 	call GetScriptObject
 	cp LAST_TALKED
 	jr z, .ok
-	ld [hLastTalked], a
+	ldh [hLastTalked], a
 .ok
 	call GetScriptByte
 	ld [wScriptDelay], a
@@ -1249,7 +1249,7 @@ Script_showemote:
 	jp ScriptCall
 
 ShowEmoteScript:
-	loademote EMOTE_MEM
+	loademote EMOTE_FROM_MEM
 	applymovement2 .Show
 	pause 0
 	applymovement2 .Hide
@@ -1398,8 +1398,8 @@ Script_reloadmap:
 	xor a
 	ld [wBattleScriptFlags], a
 	ld a, MAPSETUP_RELOADMAP
-	ld [hMapEntryMethod], a
-	ld a, $1
+	ldh [hMapEntryMethod], a
+	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus
 	call StopScript
 	ret
@@ -1454,7 +1454,7 @@ ScriptCall:
 	ld hl, wScriptStackSize
 	ld e, [hl]
 	inc [hl]
-	ld d, $0
+	ld d, 0
 	ld hl, wScriptStack
 	add hl, de
 	add hl, de
@@ -1777,7 +1777,7 @@ Script_random:
 	push bc
 	call Random
 	pop bc
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	cp b
 	jr nc, .loop
 	jr .finish
@@ -1786,7 +1786,7 @@ Script_random:
 	push bc
 	call Random
 	pop bc
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 
 .finish
 	push af
@@ -2187,9 +2187,9 @@ Script_checkcoins:
 
 LoadCoinAmountToMem:
 	call GetScriptByte
-	ld [hMoneyTemp + 1], a
+	ldh [hMoneyTemp + 1], a
 	call GetScriptByte
-	ld [hMoneyTemp], a
+	ldh [hMoneyTemp], a
 	ld bc, hMoneyTemp
 	ret
 
@@ -2473,11 +2473,11 @@ Script_warp:
 	ld [wXCoord], a
 	call GetScriptByte
 	ld [wYCoord], a
-	ld a, -1
+	ld a, SPAWN_N_A
 	ld [wDefaultSpawnpoint], a
 	ld a, MAPSETUP_WARP
-	ld [hMapEntryMethod], a
-	ld a, 1
+	ldh [hMapEntryMethod], a
+	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus
 	call StopScript
 	ret
@@ -2486,11 +2486,11 @@ Script_warp:
 	call GetScriptByte
 	call GetScriptByte
 	call GetScriptByte
-	ld a, -1
+	ld a, SPAWN_N_A
 	ld [wDefaultSpawnpoint], a
 	ld a, MAPSETUP_BADWARP
-	ld [hMapEntryMethod], a
-	ld a, 1
+	ldh [hMapEntryMethod], a
+	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus
 	call StopScript
 	ret
@@ -2520,7 +2520,7 @@ Script_blackoutmod:
 Script_dontrestartmapmusic:
 ; script command 0x83
 
-	ld a, 1
+	ld a, TRUE
 	ld [wDontPlayMapMusicOnReload], a
 	ret
 
@@ -2547,7 +2547,7 @@ Script_delcmdqueue:
 	ld b, a
 	farcall DelCmdQueue ; no need to farcall
 	ret c
-	ld a, 1
+	ld a, TRUE
 	ld [wScriptVar], a
 	ret
 
@@ -2585,7 +2585,7 @@ Script_reloadmappart::
 ; script command 0x7c
 
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call OverworldTextModeSwitch
 	call GetMovementPermissions
 	farcall ReloadMapPart
@@ -2610,8 +2610,8 @@ Script_newloadmap:
 ; parameters: which_method
 
 	call GetScriptByte
-	ld [hMapEntryMethod], a
-	ld a, 1
+	ldh [hMapEntryMethod], a
+	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus
 	call StopScript
 	ret
@@ -2793,7 +2793,7 @@ Script_credits:
 	farcall RedCredits
 ReturnFromCredits:
 	call Script_endall
-	ld a, $3
+	ld a, MAPSTATUS_DONE
 	call LoadMapStatus
 	call StopScript
 	ret

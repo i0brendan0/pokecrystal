@@ -3,10 +3,10 @@ TIMESET_DOWN_ARROW EQUS "\"♀\"" ; $f5
 
 InitClock:
 ; Ask the player to set the time.
-	ld a, [hInMenu]
+	ldh a, [hInMenu]
 	push af
 	ld a, $1
-	ld [hInMenu], a
+	ldh [hInMenu], a
 
 	ld a, $0
 	ld [wSpriteUpdatesEnabled], a
@@ -24,7 +24,7 @@ InitClock:
 	ld b, SCGB_DIPLOMA
 	call GetSGBLayout
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call LoadStandardFont
 	ld de, TimeSetBackgroundGFX
 	ld hl, vTiles2 tile $00
@@ -117,22 +117,22 @@ InitClock:
 	call PrintText
 	call WaitPressAorB_BlinkCursor
 	pop af
-	ld [hInMenu], a
+	ldh [hInMenu], a
 	ret
 
 .ClearScreen:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	xor a
 	call ByteFill
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 SetHour:
-	ld a, [hJoyPressed]
+	ldh a, [hJoyPressed]
 	and A_BUTTON
 	jr nz, .Confirm
 
@@ -223,7 +223,7 @@ UnreferencedFunction907f1:
 	ret
 
 SetMinutes:
-	ld a, [hJoyPressed]
+	ldh a, [hJoyPressed]
 	and A_BUTTON
 	jr nz, .a_button
 	ld hl, hJoyLast
@@ -291,21 +291,21 @@ PrintTwoDigitNumberRightAlign:
 
 Text_WokeUpOak:
 	; Zzz… Hm? Wha…? You woke me up! Will you check the clock for me?
-	text_jump UnknownText_0x1bc29c
-	db "@"
+	text_far UnknownText_0x1bc29c
+	text_end
 
 Text_WhatTimeIsIt:
 	; What time is it?
-	text_jump UnknownText_0x1bc2eb
-	db "@"
+	text_far UnknownText_0x1bc2eb
+	text_end
 
 String_oclock:
 	db "o'clock@"
 
 Text_WhatHrs:
 	; What?@ @
-	text_jump UnknownText_0x1bc2fd
-	start_asm
+	text_far UnknownText_0x1bc2fd
+	text_asm
 	hlcoord 1, 16
 	call DisplayHourOClock
 	ld hl, .QuestionMark
@@ -313,21 +313,21 @@ Text_WhatHrs:
 
 .QuestionMark:
 	; ?
-	text_jump UnknownText_0x1bc305
-	db "@"
+	text_far UnknownText_0x1bc305
+	text_end
 
 Text_HowManyMinutes:
 	; How many minutes?
-	text_jump UnknownText_0x1bc308
-	db "@"
+	text_far UnknownText_0x1bc308
+	text_end
 
 String_min:
 	db "min.@"
 
 Text_WhoaMins:
 	; Whoa!@ @
-	text_jump UnknownText_0x1bc31b
-	start_asm
+	text_far UnknownText_0x1bc31b
+	text_asm
 	hlcoord 7, 14
 	call DisplayMinutesWithMinString
 	ld hl, .QuestionMark
@@ -335,11 +335,11 @@ Text_WhoaMins:
 
 .QuestionMark:
 	; ?
-	text_jump UnknownText_0x1bc323
-	db "@"
+	text_far UnknownText_0x1bc323
+	text_end
 
 OakText_ResponseToSetTime:
-	start_asm
+	text_asm
 	decoord 1, 14
 	ld a, [wInitHourBuffer]
 	ld c, a
@@ -370,18 +370,18 @@ OakText_ResponseToSetTime:
 
 .overslept
 	; ! I overslept!
-	text_jump UnknownText_0x1bc326
-	db "@"
+	text_far UnknownText_0x1bc326
+	text_end
 
 .yikes
 	; ! Yikes! I over- slept!
-	text_jump UnknownText_0x1bc336
-	db "@"
+	text_far UnknownText_0x1bc336
+	text_end
 
 .sodark
 	; ! No wonder it's so dark!
-	text_jump UnknownText_0x1bc34f
-	db "@"
+	text_far UnknownText_0x1bc34f
+	text_end
 
 TimeSetBackgroundGFX:
 INCBIN "gfx/new_game/timeset_bg.1bpp"
@@ -391,10 +391,10 @@ TimeSetDownArrowGFX:
 INCBIN "gfx/new_game/down_arrow.1bpp"
 
 SetDayOfWeek:
-	ld a, [hInMenu]
+	ldh a, [hInMenu]
 	push af
 	ld a, $1
-	ld [hInMenu], a
+	ldh [hInMenu], a
 	ld de, TimeSetUpArrowGFX
 	ld hl, vTiles0 tile TIMESET_UP_ARROW
 	lb bc, BANK(TimeSetUpArrowGFX), 1
@@ -440,11 +440,11 @@ SetDayOfWeek:
 	call InitDayOfWeek
 	call LoadStandardFont
 	pop af
-	ld [hInMenu], a
+	ldh [hInMenu], a
 	ret
 
 .GetJoypadAction:
-	ld a, [hJoyPressed]
+	ldh a, [hJoyPressed]
 	and A_BUTTON
 	jr z, .not_A
 	scf
@@ -487,7 +487,7 @@ SetDayOfWeek:
 
 .finish_dpad
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 10, 4
 	ld b, 2
 	ld c, 9
@@ -534,11 +534,11 @@ SetDayOfWeek:
 
 .WhatDayIsItText:
 	; What day is it?
-	text_jump UnknownText_0x1bc369
-	db "@"
+	text_far UnknownText_0x1bc369
+	text_end
 
 .ConfirmWeekdayText:
-	start_asm
+	text_asm
 	hlcoord 1, 14
 	call .PlaceWeekdayString
 	ld hl, .IsIt
@@ -546,8 +546,8 @@ SetDayOfWeek:
 
 .IsIt:
 	; , is it?
-	text_jump UnknownText_0x1bc37a
-	db "@"
+	text_far UnknownText_0x1bc37a
+	text_end
 
 InitialSetDSTFlag:
 	ld a, [wDST]
@@ -561,11 +561,11 @@ InitialSetDSTFlag:
 	ret
 
 .Text:
-	start_asm
+	text_asm
 	call UpdateTime
-	ld a, [hHours]
+	ldh a, [hHours]
 	ld b, a
-	ld a, [hMinutes]
+	ldh a, [hMinutes]
 	ld c, a
 	decoord 1, 14
 	farcall PrintHoursMins
@@ -574,8 +574,8 @@ InitialSetDSTFlag:
 
 .DSTIsThatOK:
 	; DST, is that OK?
-	text_jump Text_DSTIsThatOK
-	db "@"
+	text_far Text_DSTIsThatOK
+	text_end
 
 InitialClearDSTFlag:
 	ld a, [wDST]
@@ -589,11 +589,11 @@ InitialClearDSTFlag:
 	ret
 
 .Text:
-	start_asm
+	text_asm
 	call UpdateTime
-	ld a, [hHours]
+	ldh a, [hHours]
 	ld b, a
-	ld a, [hMinutes]
+	ldh a, [hMinutes]
 	ld c, a
 	decoord 1, 14
 	farcall PrintHoursMins
@@ -602,8 +602,8 @@ InitialClearDSTFlag:
 
 .IsThatOK:
 	; , is that OK?
-	text_jump UnknownText_0x1c5ff1
-	db "@"
+	text_far UnknownText_0x1c5ff1
+	text_end
 
 DebugDisplayTime:
 	hlcoord 1, 14
@@ -614,7 +614,7 @@ DebugDisplayTime:
 	ret
 
 .Text:
-	start_asm
+	text_asm
 	call UpdateTime
 
 	hlcoord 1, 14

@@ -49,13 +49,13 @@ RestartClock:
 
 .Text_ClockTimeMayBeWrong:
 	; The clock's time may be wrong. Please reset the time.
-	text_jump UnknownText_0x1c40e6
-	db "@"
+	text_far UnknownText_0x1c40e6
+	text_end
 
 .Text_SetWithControlPad:
 	; Set with the Control Pad. Confirm: A Button Cancel:  B Button
-	text_jump UnknownText_0x1c411c
-	db "@"
+	text_far UnknownText_0x1c411c
+	text_end
 
 .SetClock:
 	ld a, 1
@@ -66,9 +66,9 @@ RestartClock:
 	call UpdateTime
 	call GetWeekday
 	ld [wBuffer4], a
-	ld a, [hHours]
+	ldh a, [hHours]
 	ld [wBuffer5], a
-	ld a, [hMinutes]
+	ldh a, [hMinutes]
 	ld [wBuffer6], a
 
 .loop
@@ -103,13 +103,13 @@ RestartClock:
 
 .Text_IsThisOK:
 	; Is this OK?
-	text_jump UnknownText_0x1c415b
-	db "@"
+	text_far UnknownText_0x1c415b
+	text_end
 
 .Text_ClockReset:
 	; The clock has been reset.
-	text_jump UnknownText_0x1c4168
-	db "@"
+	text_far UnknownText_0x1c4168
+	text_end
 
 .joy_loop
 	call JoyTextDelay_ForcehJoyDown

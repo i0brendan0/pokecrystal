@@ -330,7 +330,7 @@ HatchEggs:
 	xor a
 	ld [wMonType], a
 	push de
-	ld b, $0
+	ld b, NAME_MON
 	farcall NamingScreen
 	pop hl
 	ld de, wStringBuffer1
@@ -356,8 +356,8 @@ HatchEggs:
 
 .Text_HatchEgg:
 	; Huh? @ @
-	text_jump UnknownText_0x1c0db0
-	start_asm
+	text_far UnknownText_0x1c0db0
+	text_asm
 	ld hl, wVramState
 	res 0, [hl]
 	push hl
@@ -378,18 +378,18 @@ HatchEggs:
 
 .ClearTextbox:
 	;
-	text_jump UnknownText_0x1c0db8
-	db "@"
+	text_far UnknownText_0x1c0db8
+	text_end
 
 .CameOutOfItsEgg:
 	; came out of its EGG!@ @
-	text_jump UnknownText_0x1c0dba
-	db "@"
+	text_far UnknownText_0x1c0dba
+	text_end
 
 .Text_NicknameHatchling:
 	; Give a nickname to @ ?
-	text_jump UnknownText_0x1c0dd8
-	db "@"
+	text_far UnknownText_0x1c0dd8
+	text_end
 
 InitEggMoves:
 	call GetHeritableMoves
@@ -654,9 +654,9 @@ Hatch_UpdateFrontpicBGMapCenter:
 	pop bc
 	pop hl
 	ld a, b
-	ld [hBGMapAddress + 1], a
+	ldh [hBGMapAddress + 1], a
 	ld a, c
-	ld [hGraphicStartTile], a
+	ldh [hGraphicStartTile], a
 	lb bc, 7, 7
 	predef PlaceGraphic
 	pop af
@@ -708,7 +708,7 @@ EggHatch_AnimationSequence:
 	call DelayFrames
 	xor a
 	ld [wFrameCounter], a
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	ld b, a
 .outerloop
 	ld hl, wFrameCounter
@@ -720,14 +720,14 @@ EggHatch_AnimationSequence:
 .loop
 ; wobble e times
 	ld a, 2
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld a, -2
 	ld [wGlobalAnimXOffset], a
 	call EggHatch_DoAnimFrame
 	ld c, 2
 	call DelayFrames
 	ld a, -2
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld a, 2
 	ld [wGlobalAnimXOffset], a
 	call EggHatch_DoAnimFrame
@@ -744,7 +744,7 @@ EggHatch_AnimationSequence:
 	ld de, SFX_EGG_HATCH
 	call PlaySFX
 	xor a
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld [wGlobalAnimXOffset], a
 	call ClearSprites
 	call Hatch_InitShellFragments
@@ -895,13 +895,13 @@ DayCareMonCursor:
 
 DayCareMon2Text:
 	; It's @ that was left with the DAY-CARE LADY.
-	text_jump UnknownText_0x1c0df3
-	db "@"
+	text_far UnknownText_0x1c0df3
+	text_end
 
 DayCareMon1Text:
 	; It's @ that was left with the DAY-CARE MAN.
-	text_jump UnknownText_0x1c0e24
-	db "@"
+	text_far UnknownText_0x1c0e24
+	text_end
 
 DayCareMonCompatibilityText:
 	push bc
@@ -930,28 +930,28 @@ DayCareMonCompatibilityText:
 
 .AllAlone:
 	; It's brimming with energy.
-	text_jump UnknownText_0x1c0e54
-	db "@"
+	text_far UnknownText_0x1c0e54
+	text_end
 
 .Incompatible:
 	; It has no interest in @ .
-	text_jump UnknownText_0x1c0e6f
-	db "@"
+	text_far UnknownText_0x1c0e6f
+	text_end
 
 .HighCompatibility:
 	; It appears to care for @ .
-	text_jump UnknownText_0x1c0e8d
-	db "@"
+	text_far UnknownText_0x1c0e8d
+	text_end
 
 .ModerateCompatibility:
 	; It's friendly with @ .
-	text_jump UnknownText_0x1c0eac
-	db "@"
+	text_far UnknownText_0x1c0eac
+	text_end
 
 .SlightCompatibility:
 	; It shows interest in @ .
-	text_jump UnknownText_0x1c0ec6
-	db "@"
+	text_far UnknownText_0x1c0ec6
+	text_end
 
 Unreferenced_DayCareMonPrintEmptyString:
 	ld hl, .string

@@ -2,11 +2,11 @@ _HandlePlayerStep::
 	ld a, [wPlayerStepFlags]
 	and a
 	ret z
-	bit 7, a ; starting step
+	bit PLAYERSTEP_START_F, a
 	jr nz, .update_overworld_map
-	bit 6, a ; finishing step
+	bit PLAYERSTEP_STOP_F, a
 	jr nz, .update_player_coords
-	bit 5, a ; ongoing step
+	bit PLAYERSTEP_CONTINUE_F, a
 	jr nz, .finish
 	ret
 
@@ -39,12 +39,12 @@ ScrollScreen::
 	ld d, a
 	ld a, [wPlayerStepVectorY]
 	ld e, a
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	add d
-	ld [hSCX], a
-	ld a, [hSCY]
+	ldh [hSCX], a
+	ldh a, [hSCY]
 	add e
-	ld [hSCY], a
+	ldh [hSCY], a
 	ret
 
 HandlePlayerStep:

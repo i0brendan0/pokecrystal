@@ -73,8 +73,8 @@ CheckMagikarpLength:
 
 .MeasureItText:
 	; Let me measure that MAGIKARP. …Hm, it measures @ .
-	text_jump UnknownText_0x1c1203
-	db "@"
+	text_far UnknownText_0x1c1203
+	text_end
 
 Magikarp_LoadFeetInchesChars:
 	ld hl, vTiles2 tile "′" ; $6e
@@ -198,30 +198,30 @@ CalcMagikarpLength:
 	; c = (bc - de) / [hl]
 	call .BCMinusDE
 	ld a, b
-	ld [hDividend + 0], a
+	ldh [hDividend + 0], a
 	ld a, c
-	ld [hDividend + 1], a
+	ldh [hDividend + 1], a
 	ld a, [hl]
-	ld [hDivisor], a
+	ldh [hDivisor], a
 	ld b, 2
 	call Divide
-	ld a, [hQuotient + 2]
+	ldh a, [hQuotient + 3]
 	ld c, a
 
 	; de = c + 100 × (2 + i)
 	xor a
-	ld [hMultiplicand + 0], a
-	ld [hMultiplicand + 1], a
+	ldh [hMultiplicand + 0], a
+	ldh [hMultiplicand + 1], a
 	ld a, 100
-	ld [hMultiplicand + 2], a
+	ldh [hMultiplicand + 2], a
 	ld a, [wTempByteValue]
-	ld [hMultiplier], a
+	ldh [hMultiplier], a
 	call Multiply
 	ld b, 0
-	ld a, [hProduct + 3]
+	ldh a, [hProduct + 3]
 	add c
 	ld e, a
-	ld a, [hProduct + 2]
+	ldh a, [hProduct + 2]
 	adc b
 	ld d, a
 	jr .done
@@ -313,5 +313,5 @@ MagikarpHouseSign:
 
 .CurrentRecordtext:
 	; "CURRENT RECORD"
-	text_jump UnknownText_0x1c123a
-	db "@"
+	text_far UnknownText_0x1c123a
+	text_end

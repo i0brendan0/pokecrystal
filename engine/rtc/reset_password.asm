@@ -33,18 +33,18 @@ _ResetClock:
 
 .text_okay
 	; Password OK. Select CONTINUE & reset settings.
-	text_jump UnknownText_0x1c55db
-	db "@"
+	text_far UnknownText_0x1c55db
+	text_end
 
 .text_wrong
 	; Wrong password!
-	text_jump UnknownText_0x1c560b
-	db "@"
+	text_far UnknownText_0x1c560b
+	text_end
 
 .text_askreset
 	; Reset the clock?
-	text_jump UnknownText_0x1c561c
-	db "@"
+	text_far UnknownText_0x1c561c
+	text_end
 
 .NoYes_MenuHeader:
 	db 0 ; flags
@@ -73,7 +73,7 @@ ClockResetPassword:
 	call .updateIDdisplay
 .loop2
 	call JoyTextDelay
-	ld a, [hJoyLast]
+	ldh a, [hJoyLast]
 	ld b, a
 	and A_BUTTON
 	jr nz, .confirm
@@ -103,8 +103,8 @@ ClockResetPassword:
 
 .pleaseenterpasswordtext
 	; Please enter the password.
-	text_jump UnknownText_0x1c562e
-	db "@"
+	text_far UnknownText_0x1c562e
+	text_end
 
 .updateIDdisplay
 	hlcoord 14, 15

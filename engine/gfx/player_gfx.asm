@@ -28,11 +28,11 @@ MovePlayerPic:
 	push hl
 	push de
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	lb bc, 7, 7
 	predef PlaceGraphic
 	xor a
-	ld [hBGMapThird], a
+	ldh [hBGMapThird], a
 	call WaitBGMap
 	call DelayFrame
 	pop de
@@ -111,7 +111,7 @@ GetCardPic:
 .GotClass:
 	ld de, vTiles2 tile $00
 	ld bc, $23 tiles
-	ld a, BANK(ChrisCardPic) ; BANK(KrisCardPic)
+	ld a, BANK(ChrisCardPic) ; aka BANK(KrisCardPic)
 	call FarCopyBytes
 	ld hl, CardGFX
 	ld de, vTiles2 tile $23
@@ -147,7 +147,7 @@ GetChrisBackpic:
 HOF_LoadTrainerFrontpic:
 	call WaitBGMap
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld e, 0
 	ld a, [wPlayerGender]
 	bit PLAYERGENDER_FEMALE_F, a
@@ -165,12 +165,12 @@ HOF_LoadTrainerFrontpic:
 
 .GotPic:
 	ld hl, vTiles2
-	ld b, BANK(ChrisPic) ; BANK(KrisPic)
+	ld b, BANK(ChrisPic) ; aka BANK(KrisPic)
 	ld c, 7 * 7
 	call Get2bpp
 	call WaitBGMap
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 DrawIntroPlayerPic:
@@ -194,13 +194,13 @@ DrawIntroPlayerPic:
 	ld de, KrisPic
 .GotPic:
 	ld hl, vTiles2
-	ld b, BANK(ChrisPic) ; BANK(KrisPic)
+	ld b, BANK(ChrisPic) ; aka BANK(KrisPic)
 	ld c, 7 * 7 ; dimensions
 	call Get2bpp
 
 ; Draw
 	xor a
-	ld [hGraphicStartTile], a
+	ldh [hGraphicStartTile], a
 	hlcoord 6, 4
 	lb bc, 7, 7
 	predef PlaceGraphic

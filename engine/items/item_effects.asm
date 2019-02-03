@@ -258,7 +258,7 @@ PokeBallEffect:
 	jp z, .skip_hp_calc
 
 	ld a, b
-	ld [hMultiplicand + 2], a
+	ldh [hMultiplicand + 2], a
 
 	ld hl, wEnemyMonHP
 	ld b, [hl]
@@ -300,20 +300,20 @@ PokeBallEffect:
 	push bc
 	ld a, b
 	sub c
-	ld [hMultiplier], a
+	ldh [hMultiplier], a
 	xor a
-	ld [hDividend + 0], a
-	ld [hMultiplicand + 0], a
-	ld [hMultiplicand + 1], a
+	ldh [hDividend + 0], a
+	ldh [hMultiplicand + 0], a
+	ldh [hMultiplicand + 1], a
 	call Multiply
 	pop bc
 
 	ld a, b
-	ld [hDivisor], a
-	ld b, $4
+	ldh [hDivisor], a
+	ld b, 4
 	call Divide
 
-	ld a, [hQuotient + 2]
+	ldh a, [hQuotient + 3]
 	and a
 	jr nz, .statuscheck
 	ld a, 1
@@ -389,7 +389,7 @@ PokeBallEffect:
 	ld a, d
 	ld [wFXAnimID + 1], a
 	xor a
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 	ld [wBuffer2], a
 	ld [wNumHits], a
 	predef PlayBattleAnim
@@ -584,7 +584,7 @@ PokeBallEffect:
 	push de
 	xor a ; PARTYMON
 	ld [wMonType], a
-	ld b, 0
+	ld b, NAME_MON
 	farcall NamingScreen
 
 	call RotateThreePalettesRight
@@ -637,7 +637,7 @@ PokeBallEffect:
 	ld a, BOXMON
 	ld [wMonType], a
 	ld de, wMonOrItemNameBuffer
-	ld b, $0
+	ld b, NAME_MON
 	farcall NamingScreen
 
 	ld a, BANK(sBoxMonNicknames)
@@ -1063,38 +1063,38 @@ LevelBallMultiplier:
 
 Text_RBY_CatchMarowak:
 	; It dodged the thrown BALL! This #MON can't be caught!
-	text_jump UnknownText_0x1c5a5a
-	db "@"
+	text_far UnknownText_0x1c5a5a
+	text_end
 
 Text_RBY_NoShake:
 	; You missed the #MON!
-	text_jump UnknownText_0x1c5a90
-	db "@"
+	text_far UnknownText_0x1c5a90
+	text_end
 
 Text_NoShake:
 	; Oh no! The #MON broke free!
-	text_jump UnknownText_0x1c5aa6
-	db "@"
+	text_far UnknownText_0x1c5aa6
+	text_end
 
 Text_OneShake:
 	; Aww! It appeared to be caught!
-	text_jump UnknownText_0x1c5ac3
-	db "@"
+	text_far UnknownText_0x1c5ac3
+	text_end
 
 Text_TwoShakes:
 	; Aargh! Almost had it!
-	text_jump UnknownText_0x1c5ae3
-	db "@"
+	text_far UnknownText_0x1c5ae3
+	text_end
 
 Text_ThreeShakes:
 	; Shoot! It was so close too!
-	text_jump UnknownText_0x1c5afa
-	db "@"
+	text_far UnknownText_0x1c5afa
+	text_end
 
 Text_GotchaMonWasCaught:
 	; Gotcha! @ was caught!@ @
-	text_jump UnknownText_0x1c5b17
-	start_asm
+	text_far UnknownText_0x1c5b17
+	text_asm
 	call WaitSFX
 	push bc
 	ld de, MUSIC_NONE
@@ -1108,23 +1108,23 @@ Text_GotchaMonWasCaught:
 
 TextJump_Waitbutton:
 	; @
-	text_jump Text_Waitbutton_2
-	db "@"
+	text_far Text_Waitbutton_2
+	text_end
 
 Text_SentToBillsPC:
 	; was sent to BILL's PC.
-	text_jump UnknownText_0x1c5b38
-	db "@"
+	text_far UnknownText_0x1c5b38
+	text_end
 
 Text_AddedToPokedex:
 	; 's data was newly added to the #DEX.@ @
-	text_jump UnknownText_0x1c5b53
-	db "@"
+	text_far UnknownText_0x1c5b53
+	text_end
 
 Text_AskNicknameNewlyCaughtMon:
 	; Give a nickname to @ ?
-	text_jump UnknownText_0x1c5b7f
-	db "@"
+	text_far UnknownText_0x1c5b7f
+	text_end
 
 ReturnToBattle_UseBall:
 	farcall _ReturnToBattle_UseBall
@@ -1234,8 +1234,8 @@ RareCandy_StatBooster_ExitMenu:
 
 Text_StatRose:
 	; 's @  rose.
-	text_jump UnknownText_0x1c5b9a
-	db "@"
+	text_far UnknownText_0x1c5b9a
+	text_end
 
 StatStrings:
 	dw .health
@@ -1313,11 +1313,11 @@ RareCandyEffect:
 	ld a, MON_EXP
 	call GetPartyParamLocation
 
-	ld a, [hMultiplicand]
+	ldh a, [hMultiplicand + 0]
 	ld [hli], a
-	ld a, [hMultiplicand + 1]
+	ldh a, [hMultiplicand + 1]
 	ld [hli], a
-	ld a, [hMultiplicand + 2]
+	ldh a, [hMultiplicand + 2]
 	ld [hl], a
 
 	ld a, MON_MAXHP
@@ -1628,7 +1628,7 @@ BitterBerryEffect:
 
 	res SUBSTATUS_CONFUSED, [hl]
 	xor a
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 	call UseItemText
 
 	ld hl, ConfusedNoMoreText
@@ -1770,7 +1770,7 @@ ItemActionText:
 
 ItemActionTextWaitButton:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	ld bc, wTileMapEnd - wTileMap
 	ld a, " "
@@ -1778,7 +1778,7 @@ ItemActionTextWaitButton:
 	ld a, [wPartyMenuActionText]
 	call ItemActionText
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld c, 50
 	call DelayFrames
 	jp WaitPressAorB_BlinkCursor
@@ -1956,16 +1956,16 @@ GetOneFifthMaxHP:
 	ld a, MON_MAXHP
 	call GetPartyParamLocation
 	ld a, [hli]
-	ld [hDividend + 0], a
+	ldh [hDividend + 0], a
 	ld a, [hl]
-	ld [hDividend + 1], a
+	ldh [hDividend + 1], a
 	ld a, 5
-	ld [hDivisor], a
+	ldh [hDivisor], a
 	ld b, 2
 	call Divide
-	ld a, [hQuotient + 1]
+	ldh a, [hQuotient + 2]
 	ld d, a
-	ld a, [hQuotient + 2]
+	ldh a, [hQuotient + 3]
 	ld e, a
 	pop bc
 	ret
@@ -2062,8 +2062,8 @@ Softboiled_MilkDrinkFunction:
 
 .Text_CantBeUsed:
 	; That can't be used on this #MON.
-	text_jump UnknownText_0x1c5bac
-	db "@"
+	text_far UnknownText_0x1c5bac
+	text_end
 
 EscapeRopeEffect:
 	xor a
@@ -2098,8 +2098,8 @@ UseRepel:
 
 TextJump_RepelUsedEarlierIsStillInEffect:
 	; The REPEL used earlier is still in effect.
-	text_jump Text_RepelUsedEarlierIsStillInEffect
-	db "@"
+	text_far Text_RepelUsedEarlierIsStillInEffect
+	text_end
 
 XAccuracyEffect:
 	ld hl, wPlayerSubStatus4
@@ -2156,10 +2156,10 @@ XItemEffect:
 	inc hl
 	ld b, [hl]
 	xor a
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 	ld [wAttackMissed], a
 	ld [wEffectFailed], a
-	farcall CheckIfStatCanBeRaised
+	farcall RaiseStat
 	call WaitSFX
 
 	farcall BattleCommand_StatUpMessage
@@ -2239,18 +2239,18 @@ PokeFluteEffect:
 
 .CatchyTune:
 	; Played the # FLUTE. Now, that's a catchy tune!
-	text_jump UnknownText_0x1c5bf9
-	db "@"
+	text_far UnknownText_0x1c5bf9
+	text_end
 
 .AllSleepingMonWokeUp:
 	; All sleeping #MON woke up.
-	text_jump UnknownText_0x1c5c28
-	db "@"
+	text_far UnknownText_0x1c5c28
+	text_end
 
 .PlayedTheFlute:
 	; played the # FLUTE.@ @
-	text_jump UnknownText_0x1c5c44
-	start_asm
+	text_far UnknownText_0x1c5c44
+	text_asm
 	ld a, [wBattleMode]
 	and a
 	jr nz, .battle
@@ -2269,16 +2269,16 @@ BlueCardEffect:
 	jp MenuTextBoxWaitButton
 
 .bluecardtext
-	text_jump UnknownText_0x1c5c5e
-	db "@"
+	text_far UnknownText_0x1c5c5e
+	text_end
 
 CoinCaseEffect:
 	ld hl, .coincasetext
 	jp MenuTextBoxWaitButton
 
 .coincasetext
-	text_jump UnknownText_0x1c5c7b
-	db "@"
+	text_far UnknownText_0x1c5c7b
+	text_end
 
 OldRodEffect:
 	ld e, $0
@@ -2532,28 +2532,28 @@ RestorePP:
 
 TextJump_RaiseThePPOfWhichMove:
 	; Raise the PP of which move?
-	text_jump Text_RaiseThePPOfWhichMove
-	db "@"
+	text_far Text_RaiseThePPOfWhichMove
+	text_end
 
 TextJump_RestoreThePPOfWhichMove:
 	; Restore the PP of which move?
-	text_jump Text_RestoreThePPOfWhichMove
-	db "@"
+	text_far Text_RestoreThePPOfWhichMove
+	text_end
 
 TextJump_PPIsMaxedOut:
 	; 's PP is maxed out.
-	text_jump Text_PPIsMaxedOut
-	db "@"
+	text_far Text_PPIsMaxedOut
+	text_end
 
 TextJump_PPsIncreased:
 	; 's PP increased.
-	text_jump Text_PPsIncreased
-	db "@"
+	text_far Text_PPsIncreased
+	text_end
 
 UnknownText_0xf739:
 	; PP was restored.
-	text_jump UnknownText_0x1c5cf1
-	db "@"
+	text_far UnknownText_0x1c5cf1
+	text_end
 
 SquirtbottleEffect:
 	farcall _Squirtbottle
@@ -2591,8 +2591,8 @@ OpenBox:
 
 .text
 	; There was a trophy inside!
-	text_jump UnknownText_0x1c5d03
-	db "@"
+	text_far UnknownText_0x1c5d03
+	text_end
 
 NoEffect:
 	jp IsntTheTimeMessage
@@ -2624,7 +2624,7 @@ UseBallInTrainerBattle:
 	ld [wFXAnimID + 1], a
 	xor a
 	ld [wBattleAnimParam], a
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 	ld [wNumHits], a
 	predef PlayBattleAnim
 	ld hl, BlockedTheBallText
@@ -2686,68 +2686,68 @@ CantUseItemMessage:
 
 LooksBitterText:
 	; It looks bitter…
-	text_jump UnknownText_0x1c5d3e
-	db "@"
+	text_far UnknownText_0x1c5d3e
+	text_end
 
 CantUseOnEggText:
 	; That can't be used on an EGG.
-	text_jump UnknownText_0x1c5d50
-	db "@"
+	text_far UnknownText_0x1c5d50
+	text_end
 
 IsntTheTimeText:
 	; OAK:  ! This isn't the time to use that!
-	text_jump UnknownText_0x1c5d6e
-	db "@"
+	text_far UnknownText_0x1c5d6e
+	text_end
 
 BelongsToSomeoneElseText:
 	; That belongs to someone else!
-	text_jump UnknownText_0x1c5d97
-	db "@"
+	text_far UnknownText_0x1c5d97
+	text_end
 
 WontHaveAnyEffectText:
 	; It won't have any effect.
-	text_jump UnknownText_0x1c5db6
-	db "@"
+	text_far UnknownText_0x1c5db6
+	text_end
 
 BlockedTheBallText:
 	; The trainer blocked the BALL!
-	text_jump UnknownText_0x1c5dd0
-	db "@"
+	text_far UnknownText_0x1c5dd0
+	text_end
 
 DontBeAThiefText:
 	; Don't be a thief!
-	text_jump UnknownText_0x1c5def
-	db "@"
+	text_far UnknownText_0x1c5def
+	text_end
 
 CyclingIsntAllowedText:
 	; Cycling isn't allowed here.
-	text_jump UnknownText_0x1c5e01
-	db "@"
+	text_far UnknownText_0x1c5e01
+	text_end
 
 CantGetOnYourBikeText:
 	; Can't get on your @  now.
-	text_jump UnknownText_0x1c5e1d
-	db "@"
+	text_far UnknownText_0x1c5e1d
+	text_end
 
 Ball_BoxIsFullText:
 	; The #MON BOX is full. That can't be used now.
-	text_jump UnknownText_0x1c5e3a
-	db "@"
+	text_far UnknownText_0x1c5e3a
+	text_end
 
 UsedItemText:
 	; used the@ .
-	text_jump UnknownText_0x1c5e68
-	db "@"
+	text_far UnknownText_0x1c5e68
+	text_end
 
 GotOnTheItemText:
 	; got on the@ .
-	text_jump UnknownText_0x1c5e7b
-	db "@"
+	text_far UnknownText_0x1c5e7b
+	text_end
 
 GotOffTheItemText:
 	; got off@ the @ .
-	text_jump UnknownText_0x1c5e90
-	db "@"
+	text_far UnknownText_0x1c5e90
+	text_end
 
 ApplyPPUp:
 	ld a, MON_MOVES
@@ -2788,13 +2788,13 @@ ComputeMaxPP:
 	push bc
 	; Divide the base PP by 5.
 	ld a, [de]
-	ld [hDividend + 3], a
+	ldh [hDividend + 3], a
 	xor a
-	ld [hDividend], a
-	ld [hDividend + 1], a
-	ld [hDividend + 2], a
+	ldh [hDividend], a
+	ldh [hDividend + 1], a
+	ldh [hDividend + 2], a
 	ld a, 5
-	ld [hDivisor], a
+	ldh [hDivisor], a
 	ld b, 4
 	call Divide
 	; Get the number of PP, which are bits 6 and 7 of the PP value stored in RAM.
@@ -2814,7 +2814,7 @@ ComputeMaxPP:
 	; Since this would overflow into bit 6, we prevent that from happening
 	; by decreasing the extra amount of PP each PP Up provides, resulting
 	; in a maximum of 61.
-	ld a, [hQuotient + 2]
+	ldh a, [hQuotient + 3]
 	cp $8
 	jr c, .okay
 	ld a, $7

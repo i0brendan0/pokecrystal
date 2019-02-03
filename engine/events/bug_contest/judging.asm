@@ -26,8 +26,8 @@ _BugContestJudging:
 	jp BugContest_GetPlayersResult
 
 BugContest_FirstPlaceText:
-	text_jump ContestJudging_FirstPlaceText
-	start_asm
+	text_far ContestJudging_FirstPlaceText
+	text_asm
 	ld de, SFX_1ST_PLACE
 	call PlaySFX
 	call WaitSFX
@@ -36,13 +36,13 @@ BugContest_FirstPlaceText:
 
 BugContest_FirstPlaceScoreText:
 	; The winning score was @  points!
-	text_jump ContestJudging_FirstPlaceScoreText
-	db "@"
+	text_far ContestJudging_FirstPlaceScoreText
+	text_end
 
 BugContest_SecondPlaceText:
 	; Placing second was @ , who caught a @ !@ @
-	text_jump ContestJudging_SecondPlaceText
-	start_asm
+	text_far ContestJudging_SecondPlaceText
+	text_asm
 	ld de, SFX_2ND_PLACE
 	call PlaySFX
 	call WaitSFX
@@ -51,13 +51,13 @@ BugContest_SecondPlaceText:
 
 BugContest_SecondPlaceScoreText:
 	; The score was @  points!
-	text_jump ContestJudging_SecondPlaceScoreText
-	db "@"
+	text_far ContestJudging_SecondPlaceScoreText
+	text_end
 
 BugContest_ThirdPlaceText:
 	; Placing third was @ , who caught a @ !@ @
-	text_jump ContestJudging_ThirdPlaceText
-	start_asm
+	text_far ContestJudging_ThirdPlaceText
+	text_asm
 	ld de, SFX_3RD_PLACE
 	call PlaySFX
 	call WaitSFX
@@ -66,8 +66,8 @@ BugContest_ThirdPlaceText:
 
 BugContest_ThirdPlaceScoreText:
 	; The score was @  points!
-	text_jump ContestJudging_ThirdPlaceScoreText
-	db "@"
+	text_far ContestJudging_ThirdPlaceScoreText
+	text_end
 
 LoadContestantName:
 ; If a = 1, get your name.
@@ -150,9 +150,9 @@ BugContest_JudgeContestants:
 	ld [hli], a
 	ld a, [wContestMon]
 	ld [hli], a
-	ld a, [hProduct]
+	ldh a, [hProduct]
 	ld [hli], a
-	ld a, [hProduct + 1]
+	ldh a, [hProduct + 1]
 	ld [hl], a
 	call DetermineContestWinners
 	ret
@@ -287,8 +287,8 @@ ContestScore:
 ; Determine the player's score in the Bug Catching Contest.
 
 	xor a
-	ld [hProduct], a
-	ld [hMultiplicand], a
+	ldh [hProduct], a
+	ldh [hMultiplicand], a
 
 	ld a, [wContestMonSpecies] ; Species
 	and a

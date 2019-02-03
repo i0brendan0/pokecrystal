@@ -257,7 +257,7 @@ Function8b45c:
 	call Function8b4fd
 	call Function89c44
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	pop bc
 	call Function8b3dd
 	jr nc, .asm_8b46e
@@ -459,28 +459,28 @@ Function8b555:
 
 UnknownText_0x8b5ce:
 	; Please enter any four-digit number.
-	text_jump UnknownText_0x1bc187
-	db "@"
+	text_far UnknownText_0x1bc187
+	text_end
 
 UnknownText_0x8b5d3:
 	; Enter the same number to confirm.
-	text_jump UnknownText_0x1bc1ac
-	db "@"
+	text_far UnknownText_0x1bc1ac
+	text_end
 
 UnknownText_0x8b5d8:
 	; That's not the same number.
-	text_jump UnknownText_0x1bc1cf
-	db "@"
+	text_far UnknownText_0x1bc1cf
+	text_end
 
 UnknownText_0x8b5dd:
 	; Your PASSCODE has been set. Enter this number next time to open the CARD FOLDER.
-	text_jump UnknownText_0x1bc1eb
-	db "@"
+	text_far UnknownText_0x1bc1eb
+	text_end
 
 UnknownText_0x8b5e2:
 	; 0000 is invalid!
-	text_jump UnknownText_0x1bc23e
-	db "@"
+	text_far UnknownText_0x1bc23e
+	text_end
 
 Function8b5e7:
 	ld bc, wd013
@@ -524,18 +524,18 @@ Function8b5e7:
 
 UnknownText_0x8b642:
 	; Enter the CARD FOLDER PASSCODE.
-	text_jump UnknownText_0x1bc251
-	db "@"
+	text_far UnknownText_0x1bc251
+	text_end
 
 UnknownText_0x8b647:
 	; Incorrect PASSCODE!
-	text_jump UnknownText_0x1bc272
-	db "@"
+	text_far UnknownText_0x1bc272
+	text_end
 
 UnknownText_0x8b64c:
 	; CARD FOLDER open.@ @
-	text_jump UnknownText_0x1bc288
-	start_asm
+	text_far UnknownText_0x1bc288
+	text_asm
 	ld de, SFX_TWINKLE
 	call PlaySFX
 	call WaitSFX
@@ -543,8 +543,9 @@ UnknownText_0x8b64c:
 	call DelayFrames
 	ld hl, .string_8b663
 	ret
+
 .string_8b663
-	db "@"
+	text_end
 
 Function8b664:
 	push bc
@@ -593,16 +594,16 @@ Function8b690:
 	ret
 
 Function8b6bb:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_8b6d5
 	ld de, wBGPals1
 	ld bc, 3 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call Function8949c
 	ret
 

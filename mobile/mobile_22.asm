@@ -190,12 +190,12 @@ Mobile22_ButtonSound:
 
 Mobile22_SetBGMapMode0:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 Mobile22_SetBGMapMode1:
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 Function89245:
@@ -585,16 +585,16 @@ Function89492:
 	ret
 
 Function8949c:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, 5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_894b3
 	ld de, wBGPals1 palette 7
 	ld bc, 1 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 Palette_894b3:
@@ -624,10 +624,10 @@ Function894ca:
 
 Function894dc:
 	push bc
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, 5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld c, d
 	ld b, 0
@@ -646,7 +646,7 @@ Function894dc:
 	call CopyBytes
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	pop bc
 	ret
 
@@ -732,17 +732,17 @@ Function8956f:
 	farcall GetMobileOTTrainerClass
 	ld a, c
 	ld [wTrainerClass], a
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, 5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, wd030
 	ld a, -1
 	ld [hli], a
 	ld a, " "
 	ld [hl], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, [wTrainerClass]
 	ld h, 0
 	ld l, a
@@ -750,10 +750,10 @@ Function8956f:
 	add hl, hl
 	ld de, TrainerPalettes
 	add hl, de
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld de, wd032
 	ld c, 4
 .loop
@@ -769,21 +769,21 @@ Function8956f:
 	ld [hli], a
 	ld [hl], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	pop bc
 	ret
 
 Function895c7:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, 5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_895de
 	ld de, wd030
 	ld bc, 8
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 Palette_895de:
@@ -1184,7 +1184,7 @@ Function897d5:
 
 .asm_897f3
 	ld a, $37
-	ld [hGraphicStartTile], a
+	ldh [hGraphicStartTile], a
 	hlcoord 12, 3
 	lb bc, 7, 7
 	predef PlaceGraphic
@@ -2038,10 +2038,10 @@ Function89cdf:
 
 Function89d0d:
 	call Mobile22_SetBGMapMode0
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld c, 8
 	ld de, wBGPals1
@@ -2060,7 +2060,7 @@ Function89d0d:
 	call CopyBytes
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	call SetPalettes
 	farcall PrintMail
@@ -2266,16 +2266,16 @@ Function89e6f:
 	jp Function89e36
 
 Function89e9a:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_89eb1
 	ld de, wBGPals1 palette 5
 	ld bc, 1 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 Palette_89eb1:
@@ -2636,23 +2636,23 @@ Function8a0ff:
 
 UnknownText_0x8a102:
 	; The CARD FOLDER stores your and your friends' CARDS. A CARD contains information like the person's name, phone number and profile.
-	text_jump UnknownText_0x1c5238
-	db "@"
+	text_far UnknownText_0x1c5238
+	text_end
 
 UnknownText_0x8a107:
 	; This is your CARD. Once you've entered your phone number, you can trade CARDS with your friends.
-	text_jump UnknownText_0x1c52bc
-	db "@"
+	text_far UnknownText_0x1c52bc
+	text_end
 
 UnknownText_0x8a10c:
 	; If you have your friend's CARD, you can use it to make a call from a mobile phone on the 2nd floor of a #MON CENTER.
-	text_jump UnknownText_0x1c531e
-	db "@"
+	text_far UnknownText_0x1c531e
+	text_end
 
 UnknownText_0x8a111:
 	; To safely store your collection of CARDS, you must set a PASSCODE for your CARD FOLDER.
-	text_jump UnknownText_0x1c5394
-	db "@"
+	text_far UnknownText_0x1c5394
+	text_end
 
 Function8a116:
 	ld a, $1
@@ -2780,18 +2780,18 @@ Function8a20d:
 
 UnknownText_0x8a232:
 	; If the CARD FOLDER is deleted, all its CARDS and the PASSCODE will also be deleted. Beware--a deleted CARD FOLDER can't be restored. Want to delete your CARD FOLDER?
-	text_jump UnknownText_0x1c53ee
-	db "@"
+	text_far UnknownText_0x1c53ee
+	text_end
 
 UnknownText_0x8a237:
 	; Are you sure you want to delete it?
-	text_jump UnknownText_0x1c5494
-	db "@"
+	text_far UnknownText_0x1c5494
+	text_end
 
 UnknownText_0x8a23c:
 	; The CARD FOLDER has been deleted.
-	text_jump UnknownText_0x1c54b9
-	db "@"
+	text_far UnknownText_0x1c54b9
+	text_end
 
 Function8a241:
 	call LoadStandardMenuHeader
@@ -2875,13 +2875,13 @@ MenuHeader_0x8a2ef:
 
 UnknownText_0x8a2f4:
 	; There is an older CARD FOLDER from a previous journey. Do you want to open it?
-	text_jump UnknownText_0x1c54dd
-	db "@"
+	text_far UnknownText_0x1c54dd
+	text_end
 
 UnknownText_0x8a2f9:
 	; Delete the old CARD FOLDER?
-	text_jump UnknownText_0x1c552d
-	db "@"
+	text_far UnknownText_0x1c552d
+	text_end
 
 Function8a2fe:
 	call Function8a313
@@ -3235,10 +3235,10 @@ Function8a5a3:
 	ret
 
 Function8a5b6:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_8a5e5
 	ld de, wBGPals1 + 4 palettes
 	ld bc, 3 palettes
@@ -3252,7 +3252,7 @@ Function8a5b6:
 	ld bc, 1 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 Palette_8a5e5:
@@ -3284,16 +3284,16 @@ Palette_8a605:
 	RGB 31, 31, 31
 
 Function8a60d:
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $5
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, Palette_8a624
 	ld de, wOBPals1
 	ld bc, 1 palettes
 	call CopyBytes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 Palette_8a624:
@@ -3487,7 +3487,7 @@ Function8a765:
 Function8a78c:
 	call Function891fe
 	ld de, wd002
-	ld b, $5
+	ld b, NAME_FRIEND
 	farcall NamingScreen
 	call OpenSRAMBank4
 	call Function8931b
@@ -4153,8 +4153,8 @@ Function8ac7c:
 
 UnknownText_0x8ad06:
 	; Finish registering CARDS?
-	text_jump UnknownText_0x1c554a
-	db "@"
+	text_far UnknownText_0x1c554a
+	text_end
 
 Function8ad0b:
 .asm_8ad0b

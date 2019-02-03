@@ -94,7 +94,7 @@ GetRemainingSpaceInPhoneList:
 INCLUDE "data/phone/permanent_numbers.asm"
 
 FarPlaceString:
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 	ld a, b
 	rst Bankswitch
@@ -170,7 +170,7 @@ ChooseRandomCaller:
 ; Sample a random number between 0 and 31.
 	ld c, a
 	call Random
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	swap a
 	and $1f
 ; Compute that number modulo the number of available callers.
@@ -321,7 +321,7 @@ Function90199:
 	jr nz, .OutOfArea
 	; If the person can't take a call at that time, don't do the call
 	ld a, b
-	ld [wCurrentCaller], a
+	ld [wCurCaller], a
 	ld hl, PhoneContacts
 	ld bc, PHONE_TABLE_WIDTH
 	call AddNTimes
@@ -389,7 +389,7 @@ LoadCallerScript:
 	nop
 	nop
 	ld a, e
-	ld [wCurrentCaller], a
+	ld [wCurCaller], a
 	and a
 	jr nz, .actualcaller
 	ld a, BANK(WrongNumber)
@@ -416,8 +416,8 @@ WrongNumber:
 	end
 .text
 	; Huh? Sorry, wrong number!
-	text_jump UnknownText_0x1c5565
-	db "@"
+	text_far UnknownText_0x1c5565
+	text_end
 
 Script_ReceivePhoneCall:
 	refreshscreen
@@ -463,7 +463,7 @@ RingTwice_StartCall:
 	ret
 
 Phone_CallerTextboxWithName:
-	ld a, [wCurrentCaller]
+	ld a, [wCurCaller]
 	ld b, a
 	call Function90363
 	ret
@@ -541,8 +541,8 @@ HangUp_Beep:
 	ret
 
 UnknownText_0x9032a:
-	text_jump UnknownText_0x1c5580
-	db "@"
+	text_far UnknownText_0x1c5580
+	text_end
 
 HangUp_BoopOn:
 	ld hl, UnknownText_0x90336
@@ -550,8 +550,8 @@ HangUp_BoopOn:
 	ret
 
 UnknownText_0x90336:
-	text_jump UnknownText_0x1c5588
-	db "@"
+	text_far UnknownText_0x1c5588
+	text_end
 
 HangUp_BoopOff:
 	call SpeechTextBox
@@ -680,12 +680,12 @@ Phone_GetTrainerClassName:
 	ret
 
 GetCallerLocation:
-	ld a, [wCurrentCaller]
+	ld a, [wCurCaller]
 	call GetCallerTrainerClass
 	ld d, c
 	ld e, b
 	push de
-	ld a, [wCurrentCaller]
+	ld a, [wCurCaller]
 	ld hl, PhoneContacts + PHONE_CONTACT_MAP_GROUP
 	ld bc, PHONE_TABLE_WIDTH
 	call AddNTimes
@@ -710,8 +710,8 @@ UnknownScript_0x90657:
 
 UnknownText_0x9065b:
 	; That number is out of the area.
-	text_jump UnknownText_0x1c558b
-	db "@"
+	text_far UnknownText_0x1c558b
+	text_end
 
 PhoneScript_JustTalkToThem:
 	writetext UnknownText_0x90664
@@ -719,8 +719,8 @@ PhoneScript_JustTalkToThem:
 
 UnknownText_0x90664:
 	; Just go talk to that person!
-	text_jump UnknownText_0x1c55ac
-	db "@"
+	text_far UnknownText_0x1c55ac
+	text_end
 
 UnknownScript_0x90669:
 	writetext UnknownText_0x9066d
@@ -728,5 +728,5 @@ UnknownScript_0x90669:
 
 UnknownText_0x9066d:
 	; Thank you!
-	text_jump UnknownText_0x1c55ca
-	db "@"
+	text_far UnknownText_0x1c55ca
+	text_end
