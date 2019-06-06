@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const BLACKTHORNGYM1F_CLAIR
 	const BLACKTHORNGYM1F_COOLTRAINER_M1
 	const BLACKTHORNGYM1F_COOLTRAINER_M2
@@ -68,7 +68,7 @@ BlackthornGymClairScript:
 	buttonsound
 	giveitem TM_DRAGONBREATH
 	iffalse .BagFull
-	itemtotext TM_DRAGONBREATH, MEM_BUFFER_0
+	getitemname STRING_BUFFER_3, TM_DRAGONBREATH
 	writetext BlackthornGymText_ReceivedTM24
 	playsound SFX_ITEM
 	waitsfx
@@ -76,7 +76,7 @@ BlackthornGymClairScript:
 	setevent EVENT_GOT_TM24_DRAGONBREATH
 	writetext BlackthornGymClairText_DescribeTM24
 	buttonsound
-	jump .GotTM24
+	sjump .GotTM24
 
 .BagFull:
 	writetext BlackthornGymClairText_BagFull
@@ -144,7 +144,7 @@ BlackthornGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext CLAIR, CLAIR1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, CLAIR, CLAIR1
 	jumpstd gymstatue2
 
 ClairIntroText:

@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_CAPTAIN
 	const FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_GENTLEMAN
 	const FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_TWIN1
@@ -65,7 +65,7 @@ SSAquaGranddaughterBefore:
 	writetext SSAquaGranddaughterWasPlayingMText
 	waitbutton
 	closetext
-	jump .cont
+	sjump .cont
 
 .PlayerIsFemale:
 	opentext
@@ -80,7 +80,7 @@ SSAquaGranddaughterBefore:
 	buttonsound
 	setevent EVENT_VERMILION_PORT_SAILOR_AT_GANGWAY
 	setmapscene FAST_SHIP_1F, SCENE_DEFAULT
-	jump SSAquaMetalCoatAndDocking
+	sjump SSAquaMetalCoatAndDocking
 
 SSAquaGrandpa:
 	faceplayer

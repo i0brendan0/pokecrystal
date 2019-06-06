@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const GOLDENRODGYM_WHITNEY
 	const GOLDENRODGYM_LASS1
 	const GOLDENRODGYM_LASS2
@@ -59,7 +59,7 @@ GoldenrodGymWhitneyScript:
 	playsound SFX_GET_BADGE
 	waitsfx
 	setflag ENGINE_PLAINBADGE
-	checkcode VAR_BADGES
+	readvar VAR_BADGES
 	scall GoldenrodGymActivateRockets
 .GotPlainBadge:
 	writetext WhitneyPlainBadgeText
@@ -169,7 +169,7 @@ GoldenrodGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext WHITNEY, WHITNEY1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, WHITNEY, WHITNEY1
 	jumpstd gymstatue2
 
 BridgetWalksUpMovement:

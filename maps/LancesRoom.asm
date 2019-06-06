@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const LANCESROOM_LANCE
 	const LANCESROOM_MARY
 	const LANCESROOM_OAK
@@ -12,7 +12,7 @@ LancesRoom_MapScripts:
 	callback MAPCALLBACK_TILES, .LancesRoomDoors
 
 .LockDoor:
-	priorityjump .LancesDoorLocksBehindYou
+	prioritysjump .LancesDoorLocksBehindYou
 	end
 
 .DummyScene:
@@ -44,7 +44,7 @@ LancesRoom_MapScripts:
 Script_ApproachLanceFromLeft:
 	special FadeOutMusic
 	applymovement PLAYER, MovementData_ApproachLanceFromLeft
-	jump LancesRoomLanceScript
+	sjump LancesRoomLanceScript
 
 Script_ApproachLanceFromRight:
 	special FadeOutMusic

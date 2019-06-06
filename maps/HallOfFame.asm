@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const HALLOFFAME_LANCE
 
 HallOfFame_MapScripts:
@@ -9,7 +9,7 @@ HallOfFame_MapScripts:
 	db 0 ; callbacks
 
 .EnterHallOfFame:
-	priorityjump .EnterHallOfFameScript
+	prioritysjump .EnterHallOfFameScript
 	end
 
 .DummyScene:
@@ -28,7 +28,7 @@ HallOfFame_MapScripts:
 	applymovement PLAYER, HallOfFame_SlowlyApproachMachine
 	setscene SCENE_FINISHED
 	pause 15
-	writebyte HEALMACHINE_HALL_OF_FAME
+	setval HEALMACHINE_HALL_OF_FAME
 	special HealMachineAnim
 	setevent EVENT_BEAT_ELITE_FOUR
 	setevent EVENT_TELEPORT_GUY

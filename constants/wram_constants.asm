@@ -37,7 +37,7 @@ TEXT_DELAY_FAST EQU %001 ; 1
 TEXT_DELAY_MED  EQU %011 ; 3
 TEXT_DELAY_SLOW EQU %101 ; 5
 
-; wTextBoxFrame:: ; cfce
+; wTextboxFrame:: ; cfce
 	const_def
 	const FRAME_1 ; 0
 	const FRAME_2 ; 1
@@ -49,12 +49,12 @@ TEXT_DELAY_SLOW EQU %101 ; 5
 	const FRAME_8 ; 7
 NUM_FRAMES EQU const_value
 
-; wTextBoxFlags:: ; cfcf
+; wTextboxFlags:: ; cfcf
 	const_def
 	const FAST_TEXT_DELAY_F ; 0
 	const NO_TEXT_DELAY_F   ; 1
 
-; wGBPrinter:: ; cfd0
+; wGBPrinterBrightness:: ; cfd0
 GBPRINTER_LIGHTEST EQU $00
 GBPRINTER_LIGHTER  EQU $20
 GBPRINTER_NORMAL   EQU $40
@@ -122,6 +122,13 @@ NITE     EQU 1 << NITE_F
 DARKNESS EQU 1 << DARKNESS_F
 
 ANYTIME EQU MORN | DAY | NITE
+
+; wBattleAnimFlags:: ; d40f
+	const_def
+	const BATTLEANIM_STOP_F          ; 0
+	const BATTLEANIM_IN_SUBROUTINE_F ; 1
+	const BATTLEANIM_IN_LOOP_F       ; 2
+	const BATTLEANIM_KEEPSPRITES_F   ; 3
 
 ; wPlayerSpriteSetupFlags:: ; d45b
 PLAYERSPRITESETUP_FACING_MASK       EQU %11

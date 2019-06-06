@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const OLIVINELIGHTHOUSE6F_JASMINE
 	const OLIVINELIGHTHOUSE6F_MONSTER
 	const OLIVINELIGHTHOUSE6F_POKE_BALL
@@ -67,7 +67,7 @@ OlivineLighthouseJasmine:
 	closetext
 	setevent EVENT_JASMINE_RETURNED_TO_GYM
 	clearevent EVENT_OLIVINE_GYM_JASMINE
-	checkcode VAR_FACING
+	readvar VAR_FACING
 	ifequal DOWN, .FacingDown
 	ifequal RIGHT, .FacingRight
 	applymovement OLIVINELIGHTHOUSE6F_JASMINE, MovementData_0x60c68
@@ -107,7 +107,7 @@ OlivineLighthouseAmphy:
 	checkevent EVENT_JASMINE_RETURNED_TO_GYM
 	iftrue .HealthyNow
 	writetext AmphyPalPalooText
-	writebyte AMPHAROS
+	setval AMPHAROS
 	special PlaySlowCry
 	buttonsound
 	writetext AmphyBreathingLaboredText

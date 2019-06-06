@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const TEAMROCKETBASEB1F_ROCKET1
 	const TEAMROCKETBASEB1F_ROCKET2
 	const TEAMROCKETBASEB1F_SCIENTIST
@@ -450,7 +450,7 @@ VoltorbExplodingTrap:
 	cry VOLTORB
 	special FadeInPalettes
 	setlasttalked -1
-	writecode VAR_BATTLETYPE, BATTLETYPE_TRAP
+	loadvar VAR_BATTLETYPE, BATTLETYPE_TRAP
 	loadwildmon VOLTORB, 23
 	startbattle
 	end
@@ -460,7 +460,7 @@ GeodudeExplodingTrap:
 	cry GEODUDE
 	special FadeInPalettes
 	setlasttalked -1
-	writecode VAR_BATTLETYPE, BATTLETYPE_TRAP
+	loadvar VAR_BATTLETYPE, BATTLETYPE_TRAP
 	loadwildmon GEODUDE, 21
 	startbattle
 	end
@@ -470,7 +470,7 @@ KoffingExplodingTrap:
 	cry KOFFING
 	special FadeInPalettes
 	setlasttalked -1
-	writecode VAR_BATTLETYPE, BATTLETYPE_TRAP
+	loadvar VAR_BATTLETYPE, BATTLETYPE_TRAP
 	loadwildmon KOFFING, 21
 	startbattle
 	end

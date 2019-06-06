@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const ROUTE37_WEIRD_TREE1
 	const ROUTE37_WEIRD_TREE2
 	const ROUTE37_YOUNGSTER
@@ -14,7 +14,7 @@ Route37_MapScripts:
 	callback MAPCALLBACK_OBJECTS, .Sunny
 
 .Sunny:
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal SUNDAY, .SunnyAppears
 	disappear ROUTE37_SUNNY
 	return
@@ -61,7 +61,7 @@ SunnyScript:
 	opentext
 	checkevent EVENT_GOT_MAGNET_FROM_SUNNY
 	iftrue SunnySundayScript
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal SUNDAY, SunnyNotSundayScript
 	checkevent EVENT_MET_SUNNY_OF_SUNDAY
 	iftrue .MetSunny
@@ -73,7 +73,7 @@ SunnyScript:
 	iftrue .Kris
 	writetext SunnyGivesGiftText1
 	buttonsound
-	jump .next
+	sjump .next
 .Kris:
 	writetext SunnyGivesGiftText2
 	buttonsound

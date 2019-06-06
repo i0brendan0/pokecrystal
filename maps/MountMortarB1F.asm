@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const MOUNTMORTARB1F_POKE_BALL1
 	const MOUNTMORTARB1F_POKE_BALL2
 	const MOUNTMORTARB1F_BOULDER
@@ -32,7 +32,7 @@ MountMortarB1FKiyoScript:
 	writetext UnknownText_0x7e2c0
 	buttonsound
 	waitsfx
-	checkcode VAR_PARTYCOUNT
+	readvar VAR_PARTYCOUNT
 	ifequal PARTY_LENGTH, .NoRoom
 	writetext UnknownText_0x7e355
 	playsound SFX_CAUGHT_MON

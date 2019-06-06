@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const TRAINERHOUSEB1F_RECEPTIONIST
 	const TRAINERHOUSEB1F_CHRIS
 
@@ -20,11 +20,11 @@ TrainerHouseReceptionistScript:
 	buttonsound
 	special TrainerHouse
 	iffalse .GetCal3Name
-	trainertotext CAL, CAL2, MEM_BUFFER_0
-	jump .GotName
+	gettrainername STRING_BUFFER_3, CAL, CAL2
+	sjump .GotName
 
 .GetCal3Name:
-	trainertotext CAL, CAL3, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, CAL, CAL3
 .GotName:
 	writetext TrainerHouseB1FYourOpponentIsText
 	buttonsound

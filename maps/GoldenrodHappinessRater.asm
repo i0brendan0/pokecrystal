@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const GOLDENRODHAPPINESSRATER_TEACHER
 	const GOLDENRODHAPPINESSRATER_POKEFAN_M
 	const GOLDENRODHAPPINESSRATER_TWIN
@@ -19,7 +19,7 @@ GoldenrodHappinessRaterTeacherScript:
 	ifgreater 150 - 1, .SortOfHappy
 	ifgreater 100 - 1, .QuiteCute
 	ifgreater  50 - 1, .NotUsedToYou
-	jump .LooksMean
+	sjump .LooksMean
 
 .LovesYouALot:
 	writetext GoldenrodHappinessRatingText_LovesYouALot

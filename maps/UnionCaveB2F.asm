@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const UNIONCAVEB2F_ROCKER
 	const UNIONCAVEB2F_COOLTRAINER_F1
 	const UNIONCAVEB2F_COOLTRAINER_F2
@@ -15,7 +15,7 @@ UnionCaveB2F_MapScripts:
 .Lapras:
 	checkflag ENGINE_UNION_CAVE_LAPRAS
 	iftrue .NoAppear
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal FRIDAY, .Appear
 .NoAppear:
 	disappear UNIONCAVEB2F_LAPRAS

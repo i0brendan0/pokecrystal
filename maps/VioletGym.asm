@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const VIOLETGYM_FALKNER
 	const VIOLETGYM_YOUNGSTER1
 	const VIOLETGYM_YOUNGSTER2
@@ -27,7 +27,7 @@ VioletGymFalknerScript:
 	playsound SFX_GET_BADGE
 	waitsfx
 	setflag ENGINE_ZEPHYRBADGE
-	checkcode VAR_BADGES
+	readvar VAR_BADGES
 	scall VioletGymActivateRockets
 .FightDone:
 	checkevent EVENT_GOT_TM31_MUD_SLAP
@@ -107,7 +107,7 @@ VioletGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext FALKNER, FALKNER1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, FALKNER, FALKNER1
 	jumpstd gymstatue2
 
 FalknerIntroText:

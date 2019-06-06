@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const PEWTERGYM_BROCK
 	const PEWTERGYM_YOUNGSTER
 	const PEWTERGYM_GYM_GUY
@@ -70,7 +70,7 @@ PewterGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext BROCK, BROCK1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, BROCK, BROCK1
 	jumpstd gymstatue2
 
 BrockIntroText:

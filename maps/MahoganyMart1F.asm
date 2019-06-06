@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const MAHOGANYMART1F_PHARMACIST
 	const MAHOGANYMART1F_BLACK_BELT
 	const MAHOGANYMART1F_LANCE
@@ -17,7 +17,7 @@ MahoganyMart1F_MapScripts:
 	end
 
 .LanceUncoversStaircase:
-	priorityjump MahoganyMart1FLanceUncoversStaircaseScript
+	prioritysjump MahoganyMart1FLanceUncoversStaircaseScript
 	end
 
 .MahoganyMart1FStaircase:

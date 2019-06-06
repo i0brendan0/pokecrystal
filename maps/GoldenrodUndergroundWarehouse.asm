@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const GOLDENRODUNDERGROUNDWAREHOUSE_ROCKET1
 	const GOLDENRODUNDERGROUNDWAREHOUSE_ROCKET2
 	const GOLDENRODUNDERGROUNDWAREHOUSE_ROCKET3
@@ -29,8 +29,8 @@ GoldenrodUndergroundWarehouse_MapScripts:
 	clearevent EVENT_SWITCH_12
 	clearevent EVENT_SWITCH_13
 	clearevent EVENT_SWITCH_14
-	writebyte 0
-	copyvartobyte wUndergroundSwitchPositions
+	setval 0
+	writemem wUndergroundSwitchPositions
 	return
 
 TrainerGruntM24:

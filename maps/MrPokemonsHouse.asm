@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const MRPOKEMONSHOUSE_GENTLEMAN
 	const MRPOKEMONSHOUSE_OAK
 
@@ -10,7 +10,7 @@ MrPokemonsHouse_MapScripts:
 	db 0 ; callbacks
 
 .MeetMrPokemon:
-	priorityjump .MrPokemonEvent
+	prioritysjump .MrPokemonEvent
 	end
 
 .DummyScene:
@@ -45,7 +45,7 @@ MrPokemonsHouse_MapScripts:
 	writetext MrPokemonIntroText5
 	waitbutton
 	closetext
-	jump MrPokemonsHouse_OakScript
+	sjump MrPokemonsHouse_OakScript
 
 MrPokemonsHouse_MrPokemonScript:
 	faceplayer
@@ -72,7 +72,7 @@ MrPokemonsHouse_MrPokemonScript:
 	verbosegiveitem EXP_SHARE
 	iffalse .full
 	takeitem RED_SCALE
-	jump .AlwaysNewDiscoveries
+	sjump .AlwaysNewDiscoveries
 
 .refused
 	writetext MrPokemonText_Disappointed

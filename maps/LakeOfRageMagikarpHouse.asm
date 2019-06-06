@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const LAKEOFRAGEMAGIKARPHOUSE_FISHING_GURU
 
 LakeOfRageMagikarpHouse_MapScripts:
@@ -37,7 +37,7 @@ MagikarpLengthRaterScript:
 	end
 
 .AskedForMagikarp:
-	writebyte MAGIKARP
+	setval MAGIKARP
 	special FindPartyMonThatSpecies
 	iffalse .ClearedRocketHideout
 	writetext MagikarpLengthRaterText_YouHaveAMagikarp
@@ -47,7 +47,7 @@ MagikarpLengthRaterScript:
 	ifequal MAGIKARPLENGTH_REFUSED, .Refused
 	ifequal MAGIKARPLENGTH_TOO_SHORT, .TooShort
 	; MAGIKARPLENGTH_BEAT_RECORD
-	jump .GetReward
+	sjump .GetReward
 
 .GetReward:
 	writetext MagikarpLengthRaterText_Memento

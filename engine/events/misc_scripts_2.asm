@@ -7,20 +7,20 @@ RepelWoreOffScript::
 
 .text
 	; REPEL's effect wore off.
-	text_far UnknownText_0x1bd308
+	text_far _RepelWoreOffText
 	text_end
 
 HiddenItemScript::
 	opentext
-	copybytetovar wEngineBuffer3
-	itemtotext USE_SCRIPT_VAR, MEM_BUFFER_0
+	readmem wHiddenItemID
+	getitemname STRING_BUFFER_3, USE_SCRIPT_VAR
 	writetext .found_text
 	giveitem ITEM_FROM_MEM
 	iffalse .bag_full
 	callasm SetMemEvent
 	specialsound
 	itemnotify
-	jump .finish
+	sjump .finish
 
 .bag_full
 	buttonsound
@@ -33,16 +33,16 @@ HiddenItemScript::
 
 .found_text
 	; found @ !
-	text_far UnknownText_0x1bd321
+	text_far _PlayerFoundItemText
 	text_end
 
 .no_room_text
 	; But   has no space left…
-	text_far UnknownText_0x1bd331
+	text_far _ButNoSpaceText
 	text_end
 
 SetMemEvent:
-	ld hl, wEngineBuffer1
+	ld hl, wHiddenItemEvent
 	ld a, [hli]
 	ld d, [hl]
 	ld e, a

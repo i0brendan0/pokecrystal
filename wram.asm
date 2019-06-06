@@ -39,7 +39,7 @@ wChannel8:: channel_struct wChannel8 ; c25f
 wCurTrackDuty:: db
 wCurTrackIntensity:: db
 wCurTrackFrequency:: dw
-wc296:: db ; BCD value, dummied out
+wUnusedBCDNumber:: db ; BCD value, dummied out
 wCurNoteDuration:: db ; used in MusicE0 and LoadNote
 
 wCurMusicByte:: db ; c298
@@ -95,7 +95,7 @@ wCryPitch:: dw ; c2b0
 wCryLength:: dw ; c2b2
 
 wLastVolume:: db ; c2b4
-wc2b5:: db ; c2b5
+wUnusedMusicF9Flag:: db ; c2b5
 
 wSFXPriority:: ; c2b6
 ; if nonzero, turn off music when playing sfx
@@ -145,7 +145,7 @@ wDebugFlags:: db
 wGameLogicPaused:: db ; c2cd
 wSpriteUpdatesEnabled:: db
 
-wc2cf:: db ; ????
+wUnusedScriptByteBuffer:: db
 
 wMapTimeOfDay:: db
 
@@ -171,7 +171,8 @@ wPlayerMovement:: db
 wc2e2::
 wMovementObject::
 	db
-wMovementDataPointer:: ds 3 ; dba
+wMovementDataBank:: db
+wMovementDataAddress:: dw
 wc2e6:: ds 4
 wMovementByteWasControlSwitch:: db
 wMovementPointer:: dw ; c2eb
@@ -263,7 +264,7 @@ wCurIcon:: db ; c3b6
 wCurIconTile:: db
 wSpriteAnimAddrBackup::
 wSpriteAnimIDBuffer::
-wCurSpriteAddSubFlags::
+wCurSpriteOAMFlags::
 	dw
 wCurAnimVTile:: db
 wCurAnimXCoord:: db
@@ -354,53 +355,25 @@ wTileMap:: ; c4a0
 wTileMapEnd::
 
 
-SECTION "Battle", WRAM0
+SECTION "Miscellaneous", WRAM0
 
+; This union spans 480 bytes from c608 to c7e8.
 UNION ; c608
-; unidentified uses
-wc608:: ds 53
-wc63d:: ds 5
-wc642:: ds 5
-wc647:: ds 33
-wc668:: ds 32
-wc688:: ds 2
-wc68a:: ds 350
-
-NEXTU ; c608
 ; surrounding tiles
+; This buffer determines the size for the rest of the union;
+; it uses exactly 480 bytes.
 wSurroundingTiles:: ds SURROUNDING_WIDTH * SURROUNDING_HEIGHT
 
 NEXTU ; c608
 ; box save buffer
+; SaveBoxAddress uses this buffer in three steps because it
+; needs more space than the buffer can hold.
 wBoxPartialData:: ds 480
 wBoxPartialDataEnd::
 
 NEXTU ; c608
-; odd egg
-wOddEgg:: party_struct wOddEgg
-wOddEggName:: ds MON_NAME_LENGTH
-wOddEggOTName:: ds NAME_LENGTH
-
-NEXTU ; c608
 ; battle tower temp struct
 wBT_OTTemp:: battle_tower_struct wBT_OTTemp
-
-NEXTU ; c608
-; hall of fame temp struct
-wHallOfFameTemp:: hall_of_fame wHallOfFameTemp
-
-NEXTU ; c608
-; timeset temp storage
-wTimeSetBuffer::
-	ds 20
-wInitHourBuffer:: db ; c61c
-	ds 9
-wInitMinuteBuffer:: db ; c626
-
-NEXTU ; c608
-; link engine data
-wLink_c608:: ds 10
-wc612:: ds 10
 
 NEXTU ; c608
 ; battle data
@@ -578,9 +551,6 @@ wPlayerAtkLevel:: db ; c6cc
 wPlayerDefLevel:: db ; c6cd
 wPlayerSpdLevel:: db ; c6ce
 wPlayerSAtkLevel:: db ; c6cf
-
-UNION ; c6d0
-; finish battle RAM
 wPlayerSDefLevel:: db ; c6d0
 wPlayerAccLevel:: db ; c6d1
 wPlayerEvaLevel:: db ; c6d2
@@ -739,107 +709,59 @@ wSomeoneIsRampaging:: db ; c73b
 wPlayerJustGotFrozen:: db ; c73c
 wEnemyJustGotFrozen:: db ; c73d
 wBattleEnd::
-; Battle RAM
-; c741
 
-NEXTU ; c6d0
-; trade
-wTrademons::
-wPlayerTrademon:: trademon wPlayerTrademon
-wOTTrademon::     trademon wOTTrademon
-wTrademonsEnd::
-wTradeAnimAddress:: dw
-wLinkPlayer1Name:: ds NAME_LENGTH
-wLinkPlayer2Name:: ds NAME_LENGTH
-wLinkTradeSendmonSpecies:: db
-wLinkTradeGetmonSpecies::  db
-
-NEXTU ; c6d0
-; naming screen
-wNamingScreenDestinationPointer:: dw ; c6d0
-wNamingScreenCurNameLength:: db ; c6d2
-wNamingScreenMaxNameLength:: db ; c6d3
-wNamingScreenType:: db ; c6d4
-wNamingScreenCursorObjectPointer:: dw ; c6d5
-wNamingScreenLastCharacter:: db ; c6d7
-wNamingScreenStringEntryCoord:: dw ; c6d8
-
-NEXTU ; c6d0
-; pokegear
-wPokegearPhoneLoadNameBuffer:: db ; c6d0
-wPokegearPhoneCursorPosition:: db ; c6d1
-wPokegearPhoneScrollPosition:: db ; c6d2
-wPokegearPhoneSelectedPerson:: db ; c6d3
-wPokegearPhoneSubmenuCursor:: db ; c6d4
-wPokegearMapCursorObjectPointer:: dw ; c6d5
-wPokegearMapCursorLandmark:: db ; c6d7
-wPokegearMapPlayerIconLandmark:: db ; c6d8
-wPokegearRadioChannelBank:: db ; c6d9
-wPokegearRadioChannelAddr:: dw ; c6da
-wPokegearRadioMusicPlaying:: db ; c6dc
-
-NEXTU ; c6d0
-; slot machine
-wSlots::
-wReel1:: slot_reel wReel1
-wReel2:: slot_reel wReel2
-wReel3:: slot_reel wReel3
-; c700
-wReel1Stopped:: ds 3
-wReel2Stopped:: ds 3
-wReel3Stopped:: ds 3
-wSlotBias:: db
-wSlotBet:: db
-wFirstTwoReelsMatching:: db
-wFirstTwoReelsMatchingSevens:: db
-wSlotMatched:: db
-wCurReelStopped:: ds 3
-wPayout:: dw
-wCurReelXCoord:: db
-wCurReelYCoord:: db
-	ds 2
-wSlotBuildingMatch:: db
-wSlotsDataEnd::
-	ds 28
-wSlotsEnd::
-
-NEXTU ; c6d0
-; card flip
-wCardFlip::
-wDeck:: ds 24
-wDeckEnd::
-; c6e8
-wCardFlipNumCardsPlayed:: db
-wCardFlipFaceUpCard:: db
-wDiscardPile:: ds 24
-wDiscardPileEnd::
-wCardFlipEnd::
-
-NEXTU ; c6d0
-; dummy game
-wDummyGame::
-wDummyGameCards:: ds 9 * 5
-wDummyGameCardsEnd::
-wDummyGameLastCardPicked:: db ; c6fd
-wDummyGameCard1:: db ; c6fe
-wDummyGameCard2:: db ; c6ff
-wDummyGameCard1Location:: db ; c700
-wDummyGameCard2Location:: db ; c701
-wDummyGameNumberTriesRemaining:: db ; c702
-wDummyGameLastMatches:: ds 5 ; c703
-wDummyGameCounter:: db ; c708
-wDummyGameNumCardsMatched:: db ; c709
-wDummyGameEnd::
-
-NEXTU ; c6d0
+NEXTU ; c608
 ; unown puzzle
 wUnownPuzzle::
+	ds 200
 wPuzzlePieces:: ds 6 * 6
+	ds 244
 wUnownPuzzleEnd::
 
-NEXTU ; c6d0
+NEXTU ; c608
+
+; This union spans 200 bytes from c608 to c6d0.
+UNION ; c608
+; timeset temp storage
+wTimeSetBuffer::
+	ds 20
+wInitHourBuffer:: db ; c61c
+	ds 9
+wInitMinuteBuffer:: db ; c626
+	ds 19
+wTimeSetBufferEnd::
+
+NEXTU ; c608
+; hall of fame temp struct
+wHallOfFameTemp:: hall_of_fame wHallOfFameTemp
+
+NEXTU ; c608
+; link engine data
+wLink_c608:: ds 10
+wc612:: ds 10
+
+NEXTU ; c608
+; odd egg
+wOddEgg:: party_struct wOddEgg
+wOddEggName:: ds MON_NAME_LENGTH
+wOddEggOTName:: ds NAME_LENGTH
+
+NEXTU ; c608
+; mobile data
+wc608:: ds 53
+wc63d:: ds 5
+wc642:: ds 5
+wc647:: ds 33
+wc668:: ds 32
+wc688:: ds 2
+wc68a:: ds 4
+	ds 66
+ENDU ; c6d0
+
+; This union spans 280 bytes from c6d0 to c7e8.
+UNION ; c6d0
 ; pokedex
-wPokedexDataStart::
+wPokedexDataStart:: ; c6d0
 wPokedexOrder:: ds $100 ; >= NUM_POKEMON
 wPokedexOrderEnd::
 wDexListingScrollOffset:: db ; offset of the first displayed entry from the start
@@ -872,6 +794,95 @@ endc
 	ds 2
 
 NEXTU ; c6d0
+; pokegear
+wPokegearPhoneLoadNameBuffer:: db ; c6d0
+wPokegearPhoneCursorPosition:: db ; c6d1
+wPokegearPhoneScrollPosition:: db ; c6d2
+wPokegearPhoneSelectedPerson:: db ; c6d3
+wPokegearPhoneSubmenuCursor:: db ; c6d4
+wPokegearMapCursorObjectPointer:: dw ; c6d5
+wPokegearMapCursorLandmark:: db ; c6d7
+wPokegearMapPlayerIconLandmark:: db ; c6d8
+wPokegearRadioChannelBank:: db ; c6d9
+wPokegearRadioChannelAddr:: dw ; c6da
+wPokegearRadioMusicPlaying:: db ; c6dc
+
+NEXTU ; c6d0
+; trade
+wTrademons:: ; c6d0
+wPlayerTrademon:: trademon wPlayerTrademon
+wOTTrademon::     trademon wOTTrademon
+wTrademonsEnd::
+wTradeAnimAddress:: dw
+wLinkPlayer1Name:: ds NAME_LENGTH
+wLinkPlayer2Name:: ds NAME_LENGTH
+wLinkTradeSendmonSpecies:: db
+wLinkTradeGetmonSpecies::  db
+
+NEXTU ; c6d0
+; naming screen
+wNamingScreenDestinationPointer:: dw ; c6d0
+wNamingScreenCurNameLength:: db ; c6d2
+wNamingScreenMaxNameLength:: db ; c6d3
+wNamingScreenType:: db ; c6d4
+wNamingScreenCursorObjectPointer:: dw ; c6d5
+wNamingScreenLastCharacter:: db ; c6d7
+wNamingScreenStringEntryCoord:: dw ; c6d8
+
+NEXTU ; c6d0
+; slot machine
+wSlots:: ; c6d0
+wReel1:: slot_reel wReel1
+wReel2:: slot_reel wReel2
+wReel3:: slot_reel wReel3
+; c700
+wReel1Stopped:: ds 3
+wReel2Stopped:: ds 3
+wReel3Stopped:: ds 3
+wSlotBias:: db
+wSlotBet:: db
+wFirstTwoReelsMatching:: db
+wFirstTwoReelsMatchingSevens:: db
+wSlotMatched:: db
+wCurReelStopped:: ds 3
+wPayout:: dw
+wCurReelXCoord:: db
+wCurReelYCoord:: db
+	ds 2
+wSlotBuildingMatch:: db
+wSlotsDataEnd::
+	ds 28
+wSlotsEnd::
+
+NEXTU ; c6d0
+; card flip
+wCardFlip:: ; c6d0
+wDeck:: ds 24
+wDeckEnd::
+; c6e8
+wCardFlipNumCardsPlayed:: db
+wCardFlipFaceUpCard:: db
+wDiscardPile:: ds 24
+wDiscardPileEnd::
+wCardFlipEnd::
+
+NEXTU ; c6d0
+; dummy game
+wDummyGame:: ; c6d0
+wDummyGameCards:: ds 9 * 5
+wDummyGameCardsEnd::
+wDummyGameLastCardPicked:: db ; c6fd
+wDummyGameCard1:: db ; c6fe
+wDummyGameCard2:: db ; c6ff
+wDummyGameCard1Location:: db ; c700
+wDummyGameCard2Location:: db ; c701
+wDummyGameNumberTriesRemaining:: db ; c702
+wDummyGameLastMatches:: ds 5 ; c703
+wDummyGameCounter:: db ; c708
+wDummyGameNumCardsMatched:: db ; c709
+wDummyGameEnd::
+
+NEXTU ; c6d0
 ; mobile data
 wc6d0:: ds 56
 wc708:: db
@@ -896,10 +907,13 @@ wc7d2:: ds 1
 wc7d3:: ds 1
 wc7d4:: ds 1
 ENDU ; c7e8
+
 ENDU ; c7e8
 
-wc7e8:: ds 24
-wc7e8_End::
+; This was a buffer for map-related pointers in the 1997 G/S prototype.
+; See wMapBuffer in pokegold-spaceworld's wram.asm.
+wUnusedMapBuffer:: ds 24
+wUnusedMapBufferEnd::
 
 
 SECTION "Overworld Map", WRAM0
@@ -943,16 +957,31 @@ wPrinterTileMapBuffer:: ds SCREEN_HEIGHT * SCREEN_WIDTH ; ca90
 wPrinterTileMapBufferEnd::
 wPrinterStatus:: db ; cbf8
 	ds 1
-wcbfa:: ds 1
-wGBPrinterSettings:: db
+; High nibble is for margin before the image, low nibble is for after.
+wPrinterMargins:: db ; cbfa
+wPrinterExposureTime:: db ; cbfb
 	ds 16
 wGameboyPrinterRAMEnd::
 
 NEXTU ; c800
 ; bill's pc data
+wBillsPCData::
 wBillsPCPokemonList::
 ; (species, box number, list index) x30
 	ds 3 * 30
+	ds 720
+wBillsPC_ScrollPosition:: db
+wBillsPC_CursorPosition:: db
+wBillsPC_NumMonsInBox:: db
+wBillsPC_NumMonsOnScreen:: db
+wBillsPC_LoadedBox:: db ; 0 if party, 1 - 14 if box, 15 if active box
+wBillsPC_BackupScrollPosition:: db
+wBillsPC_BackupCursorPosition:: db
+wBillsPC_BackupLoadedBox:: db
+wBillsPC_MonHasMail:: db
+	ds 5
+wBillsPCDataEnd::
+
 
 NEXTU ; c800
 ; Hall of Fame data
@@ -966,9 +995,9 @@ wLinkDataEnd::
 NEXTU ; c800
 ; link data members
 wLinkPlayerName:: ds NAME_LENGTH
-wLinkPartyCount::   db
+wLinkPartyCount:: db
 wLinkPartySpecies:: ds PARTY_LENGTH
-wLinkPartyEnd::     db ; older code doesn't check PartyCount
+wLinkPartyEnd:: db ; older code doesn't check PartyCount
 
 UNION ; c813
 ; time capsule party data
@@ -1081,22 +1110,12 @@ wca02:: db
 NEXTU ; ca00
 ; link data
 	ds 191
-wcabf:: ds 79
+wcabf:: ds 1
+ENDU ; cb00
+
+	ds 14
 wcb0e:: ds 5
-wcb13:: ds 23
-ENDU ; cb2a
-
-wBillsPC_ScrollPosition:: db
-wBillsPC_CursorPosition:: db
-wBillsPC_NumMonsInBox:: db
-wBillsPC_NumMonsOnScreen:: db
-wBillsPC_LoadedBox:: db ; 0 if party, 1 - 14 if box, 15 if active box
-wBillsPC_BackupScrollPosition:: db
-wBillsPC_BackupCursorPosition:: db
-wBillsPC_BackupLoadedBox:: db
-wBillsPC_MonHasMail:: db
-	ds 18
-
+wcb13:: ds 50
 wcb45:: ds 20
 wcb59:: ds 20
 wcb6d:: ds 1
@@ -1105,8 +1124,8 @@ wcb84:: ds 100
 wcbe8:: dw
 wLinkOTPartyMonTypes:: ds 2 * PARTY_LENGTH
 	ds 84
-
 wcc4a:: ds 22
+
 wcc60:: ds 1
 wcc61:: ds 1
 wcc62:: ds 2
@@ -1558,14 +1577,14 @@ wOptions:: ; cfcc
 ; bit 7: battle scene off/on
 	db
 wSaveFileExists:: db
-wTextBoxFrame:: ; cfce
+wTextboxFrame:: ; cfce
 ; bits 0-2: textbox frame 0-7
 	db
-wTextBoxFlags::
+wTextboxFlags::
 ; bit 0: 1-frame text delay
 ; bit 4: no text delay
 	db
-wGBPrinter:: ; cfd0
+wGBPrinterBrightness:: ; cfd0
 ; bit 0-6: brightness
 ;   lightest: $00
 ;   lighter:  $20
@@ -1753,55 +1772,10 @@ wd036:: ds 2
 	ds 6
 
 UNION ; d03e
-; engine buffers
-wEngineBuffer1:: db
-wEngineBuffer2:: db
-wEngineBuffer3:: db
-wEngineBuffer4:: db
-wEngineBuffer5:: db
-
-NEXTU ; d03e
-; menu items list
-wMenuItemsList:: ds 16
-wMenuItemsListEnd::
-
-NEXTU ; d03e
-; fruit tree data
-wCurFruitTree:: db
-wCurFruit:: db
-
-NEXTU ; d03e
-; elevator data
-wElevatorPointerBank:: db
-wElevatorPointer:: dw
-wElevatorOriginFloor:: db
-
-NEXTU ; d03e
-; coord event data
-wCurCoordEventSceneID:: db
-wCurCoordEventMapY:: db
-wCurCoordEventMapX:: db
-	ds 1
-wCurCoordEventScriptAddr:: dw
-
-NEXTU ; d03e
-; BG event data
-wCurBGEventYCoord:: db
-wCurBGEventXCoord:: db
-wCurBGEventType:: db
-wCurBGEventScriptAddr:: dw
-
-NEXTU ; d03e
-; mart data
-	ds 1
-wMartPointerBank:: db
-wMartPointer:: dw
-	ds 1
-wBargainShopFlags:: db
-
-NEXTU ; d03e
 ; trainer data
-	ds 3
+wSeenTrainerBank:: db
+wSeenTrainerDistance:: db
+wSeenTrainerDirection:: db
 wTempTrainer::
 wTempTrainerEventFlag:: dw
 wTempTrainerClass:: db
@@ -1814,11 +1788,69 @@ wRunningTrainerBattleScript:: db
 wTempTrainerEnd::
 
 NEXTU ; d03e
+; menu items list
+wMenuItemsList:: ds 16
+wMenuItemsListEnd::
+
+NEXTU ; d03e
+; fruit tree data
+wCurFruitTree:: db
+wCurFruit:: db
+
+NEXTU ; d03e
+; item ball data
+wItemBallData::
+wItemBallItemID:: db
+wItemBallQuantity:: db
+wItemBallDataEnd::
+
+NEXTU ; d03e
+; hidden item data
+wHiddenItemData::
+wHiddenItemEvent:: dw
+wHiddenItemID:: db
+wHiddenItemDataEnd::
+
+NEXTU ; d03e
+; elevator data
+wElevatorData::
+wElevatorPointerBank:: db
+wElevatorPointer:: dw
+wElevatorOriginFloor:: db
+wElevatorDataEnd::
+
+NEXTU ; d03e
+; coord event data
+wCurCoordEvent::
+wCurCoordEventSceneID:: db
+wCurCoordEventMapY:: db
+wCurCoordEventMapX:: db
+	ds 1
+wCurCoordEventScriptAddr:: dw
+
+NEXTU ; d03e
+; BG event data
+wCurBGEvent::
+wCurBGEventYCoord:: db
+wCurBGEventXCoord:: db
+wCurBGEventType:: db
+wCurBGEventScriptAddr:: dw
+
+NEXTU ; d03e
+; mart data
+wMartType:: db
+wMartPointerBank:: db
+wMartPointer:: dw
+wMartJumptableIndex:: db
+wBargainShopFlags:: db
+
+NEXTU ; d03e
 ; player movement data
-wCurInput:: db
-wd03f:: db
-wd040:: db
-wd041:: db
+wCurInput::
+wFacingTileID:: db
+wWalkingIntoNPC:: db
+wWalkingIntoLand:: db
+wWalkingIntoEdgeWarp:: db
 wMovementAnimation:: db
 wWalkingDirection:: db
 wFacingDirection:: db
@@ -1834,17 +1866,32 @@ NEXTU ; d03e
 wJumpStdScriptBuffer:: ds 3
 
 NEXTU ; d03e
-; phone script pointer
-	ds 10
-wPhoneScriptPointer:: dw
+; phone script data
+wCheckedTime:: db
+wPhoneListIndex:: db
+wNumAvailableCallers:: db
+wAvailableCallers:: ds CONTACT_LIST_SIZE
+
+NEXTU ; d03e
+; phone caller contact
+	ds 1
+wCallerContact:: ds PHONE_CONTACT_SIZE
 
 NEXTU ; d03e
 ; backup menu data
 	ds 7
 wMenuCursorBufferBackup:: db
 wMenuScrollPositionBackup:: db
-	ds 31
-ENDU ; d066
+
+NEXTU ; d03e
+; poison step data
+wPoisonStepData::
+wPoisonStepFlagSum:: db
+wPoisonStepPartyFlags:: ds PARTY_LENGTH
+wPoisonStepDataEnd::
+ENDU ; d04f
+
+	ds 23
 ENDU ; d066
 
 wTMHMMoveNameBackup:: ds MOVE_NAME_LENGTH ; d066
@@ -2220,22 +2267,23 @@ wTimeOfDay:: db ; d269
 SECTION "Enemy Party", WRAMX
 
 UNION ; d26b
-wd26b::
 wPokedexShowPointerAddr:: dw
 wPokedexShowPointerBank:: db
 	ds 3
-wd271:: ds 5
+wd271:: dw ; mobile
+
+NEXTU ; d26b
+wUnusedEggHatchFlag:: db
 
 NEXTU ; d26b
 ; enemy party
 wOTPlayerName:: ds NAME_LENGTH ; d26b
-ENDU ; d276
-
 wOTPlayerID:: dw ; d276
 	ds 8
 wOTPartyCount::   db ; d280
 wOTPartySpecies:: ds PARTY_LENGTH ; d281
 wOTPartyEnd::     db ; older code doesn't check PartyCount
+ENDU ; d276
 
 UNION ; d288
 ; ot party mons
@@ -2270,10 +2318,10 @@ wDudeBallsEnd:: db ; d2af
 wDudeBagEnd::
 ENDU ; d430
 
-wd430::
+wd430:: ; mobile
 wBattleAction:: db ; d430
 
-wd431:: db
+wd431:: db ; mobile
 wMapStatus:: db ; d432
 wMapEventStatus:: db ; d433
 
@@ -2370,7 +2418,10 @@ wStartHour:: db ; d4b7
 wStartMinute:: db ; d4b8
 wStartSecond:: db ; d4b9
 
-wRTC:: ds 8 ; d4ba
+wRTC:: ds 4 ; d4ba
+	
+	ds 4
+
 wDST:: ; d4c2
 ; bit 7: dst
 	db
@@ -2501,10 +2552,9 @@ wNumBalls:: db ; d8d7
 wBalls:: ds MAX_BALLS * 2 + 1 ; d8d8
 wBallsEnd::
 
+wNumPCItems:: db
 wPCItems:: ds MAX_PC_ITEMS * 2 + 1 ; d8f1
 wPCItemsEnd::
-
-	ds 1
 
 wPokegearFlags::
 ; bit 0: map
@@ -2737,8 +2787,10 @@ wKenjiBreakTimer:: ds 2 ; Kenji
 wYanmaMapGroup:: db ; dc5a
 wYanmaMapNumber:: db
 wPlayerMonSelection:: ds 3
-wdc5f:: ds 1
-wdc60:: ds 19
+wdc5f:: db
+wdc60:: db
+
+	ds 18
 
 wStepCount:: db ; dc73
 wPoisonStepCount:: db ; dc74
@@ -3033,11 +3085,11 @@ wBGEffect4:: battle_bg_effect wBGEffect4
 wBGEffect5:: battle_bg_effect wBGEffect5
 wActiveBGEffectsEnd::
 
-wNumActiveBattleAnims:: db ; d40e
+wLastAnimObjectIndex:: db ; d40e
 
 wBattleAnimFlags:: db ; d40f
 wBattleAnimAddress:: dw ; d410
-wBattleAnimDuration:: db ; d412
+wBattleAnimDelay:: db ; d412
 wBattleAnimParent:: dw ; d413
 wBattleAnimLoops:: db ; d415
 wBattleAnimVar:: db ; d416
@@ -3055,7 +3107,7 @@ NEXTU ; d419
 wBattleObjectTempID:: db
 wBattleObjectTempXCoord:: db
 wBattleObjectTempYCoord:: db
-wBattleObjectTemp0b:: db
+wBattleObjectTempParam:: db
 
 NEXTU ; d419
 wBattleAnimTempOAMFlags:: db
@@ -3065,7 +3117,7 @@ wBattleAnimTempXCoord:: db
 wBattleAnimTempYCoord:: db
 wBattleAnimTempXOffset:: db
 wBattleAnimTempYOffset:: db
-wBattleAnimTempAddSubFlags:: db
+wBattleAnimTempFrameOAMFlags:: db
 wBattleAnimTempPalette:: db
 ENDU ; d422
 

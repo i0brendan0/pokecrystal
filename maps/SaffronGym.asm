@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const SAFFRONGYM_SABRINA
 	const SAFFRONGYM_GRANNY1
 	const SAFFRONGYM_YOUNGSTER1
@@ -109,7 +109,7 @@ SaffronGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext SABRINA, SABRINA1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, SABRINA, SABRINA1
 	jumpstd gymstatue2
 
 SabrinaIntroText:

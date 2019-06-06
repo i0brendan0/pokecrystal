@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const ROUTE27SANDSTORMHOUSE_GRANNY
 
 Route27SandstormHouse_MapScripts:
@@ -15,7 +15,7 @@ SandstormHouseWoman:
 	writetext SandstormHouseWomanText1
 	buttonsound
 	ifgreater 150 - 1, .Loyal
-	jump .Disloyal
+	sjump .Disloyal
 
 .Loyal:
 	writetext SandstormHouseWomanLoyalText

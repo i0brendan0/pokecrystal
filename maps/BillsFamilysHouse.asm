@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const BILLSFAMILYSHOUSE_BILL
 	const BILLSFAMILYSHOUSE_POKEFAN_F
 	const BILLSFAMILYSHOUSE_TWIN
@@ -19,7 +19,7 @@ BillScript:
 	writetext BillImCountingOnYouText
 	buttonsound
 	waitsfx
-	checkcode VAR_PARTYCOUNT
+	readvar VAR_PARTYCOUNT
 	ifequal PARTY_LENGTH, .NoRoom
 	writetext ReceivedEeveeText
 	playsound SFX_CAUGHT_MON
@@ -95,7 +95,7 @@ BillsSisterScript:
 .NoRoom:
 	writetext BillsSisterPhoneFullText
 	buttonsound
-	jump .Refused
+	sjump .Refused
 
 BillsHouseBookshelf1:
 	jumpstd picturebookshelf

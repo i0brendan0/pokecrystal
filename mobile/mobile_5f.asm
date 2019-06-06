@@ -289,7 +289,7 @@ Function17d0f3:
 	farcall GetCaughtGender
 	ld a, c
 	ld [wOTTrademonCaughtData], a
-	call SpeechTextBox
+	call SpeechTextbox
 	call FadeToMenu
 	farcall Function10804d
 	farcall Function17d1f1
@@ -520,7 +520,7 @@ Function17d2ce:
 .asm_17d2e2
 	call Function17d314
 	ret c
-	call SpeechTextBox
+	call SpeechTextbox
 	call FadeToMenu
 	ldh a, [rSVBK]
 	push af
@@ -1610,7 +1610,7 @@ endr
 Unknown_17da94:
 x = 0
 rept 8
-	db (1 << x) ^ $ff
+	db $ff ^ (1 << x)
 x = x + 1
 endr
 
@@ -2664,7 +2664,7 @@ Function17e165:
 	pop hl
 	jr c, .asm_17e195
 	push hl
-	ld hl, wPCItems
+	ld hl, wNumPCItems
 	call CheckItem
 	pop hl
 	jr c, .asm_17e195
@@ -3286,7 +3286,7 @@ Function17e5af:
 	ld h, a
 	bccoord 0, 0
 	add hl, bc
-	ld bc, hFFEC
+	ld bc, $ffec
 	add hl, bc
 	ld a, [wMobileInactivityTimerSeconds]
 	ld c, a

@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const BURNEDTOWERB1F_BOULDER
 	const BURNEDTOWERB1F_RAIKOU1
 	const BURNEDTOWERB1F_ENTEI1
@@ -103,10 +103,10 @@ BurnedTowerB1FEusine:
 	writetext BurnedTowerB1FEusineText
 	waitbutton
 	closetext
-	checkcode VAR_FACING
+	readvar VAR_FACING
 	ifequal UP, .Movement2
 	applymovement BURNEDTOWERB1F_EUSINE, BurnedTowerB1FEusineMovement1
-	jump .Finish
+	sjump .Finish
 
 .Movement2:
 	applymovement BURNEDTOWERB1F_EUSINE, BurnedTowerB1FEusineMovement2

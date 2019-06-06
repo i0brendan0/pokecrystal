@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const AZALEAGYM_BUGSY
 	const AZALEAGYM_BUG_CATCHER1
 	const AZALEAGYM_BUG_CATCHER2
@@ -30,7 +30,7 @@ AzaleaGymBugsyScript:
 	playsound SFX_GET_BADGE
 	waitsfx
 	setflag ENGINE_HIVEBADGE
-	checkcode VAR_BADGES
+	readvar VAR_BADGES
 	scall AzaleaGymActivateRockets
 .FightDone:
 	checkevent EVENT_GOT_TM49_FURY_CUTTER
@@ -144,7 +144,7 @@ AzaleaGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext BUGSY, BUGSY1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, BUGSY, BUGSY1
 	jumpstd gymstatue2
 
 BugsyText_INeverLose:

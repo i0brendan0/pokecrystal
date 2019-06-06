@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST1
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST2
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST3
@@ -28,19 +28,19 @@ PokecomCenterAdminOfficeMobileComputer1:
 	closewindow
 	ifequal 1, .PokeComClub
 	ifequal 2, .MobileCenter
-	jump .Quit
+	sjump .Quit
 
 .PokeComClub:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer1Text_PokeComClub
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .MobileCenter:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer1Text_MobileCenter
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .Quit:
 	closetext
@@ -70,19 +70,19 @@ PokecomCenterAdminOfficeMobileComputer2:
 	closewindow
 	ifequal 1, .UsePhone
 	ifequal 2, .DontUsePhone
-	jump .Quit
+	sjump .Quit
 
 .UsePhone:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer2Text_UsePhone
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .DontUsePhone:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer2Text_DontUsePhone
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .Quit:
 	closetext

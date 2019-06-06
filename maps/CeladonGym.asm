@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const CELADONGYM_ERIKA
 	const CELADONGYM_LASS1
 	const CELADONGYM_LASS2
@@ -107,7 +107,7 @@ CeladonGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext ERIKA, ERIKA1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, ERIKA, ERIKA1
 	jumpstd gymstatue2
 
 ErikaBeforeBattleText:

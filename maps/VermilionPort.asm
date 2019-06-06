@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const VERMILIONPORT_SAILOR1
 	const VERMILIONPORT_SAILOR2
 	const VERMILIONPORT_SUPER_NERD
@@ -15,7 +15,7 @@ VermilionPort_MapScripts:
 	end
 
 .LeaveFastShip:
-	priorityjump .LeaveFastShipScript
+	prioritysjump .LeaveFastShipScript
 	end
 
 .FlyPoint:
@@ -84,7 +84,7 @@ VermilionPortWalkUpToShipScript:
 	iftrue .skip
 	turnobject PLAYER, LEFT
 	opentext
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal MONDAY, .NextShipWednesday
 	ifequal TUESDAY, .NextShipWednesday
 	ifequal THURSDAY, .NextShipSunday
@@ -102,7 +102,7 @@ VermilionPortWalkUpToShipScript:
 	closetext
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2
 	applymovement PLAYER, MovementData_0x74ef8
-	jump VermilionPortSailorAtGangwayScript
+	sjump VermilionPortSailorAtGangwayScript
 
 .NoTicket:
 	writetext UnknownText_0x74ff2
@@ -146,7 +146,7 @@ VermilionPortSailorScript:
 	opentext
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1
 	iftrue VermilionPortAlreadyRodeScript
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal MONDAY, .NextShipWednesday
 	ifequal TUESDAY, .NextShipWednesday
 	ifequal THURSDAY, .NextShipSunday
@@ -164,7 +164,7 @@ VermilionPortSailorScript:
 	closetext
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2
 	applymovement PLAYER, MovementData_0x74efe
-	jump VermilionPortSailorAtGangwayScript
+	sjump VermilionPortSailorAtGangwayScript
 
 .NoTicket:
 	writetext UnknownText_0x74ff2

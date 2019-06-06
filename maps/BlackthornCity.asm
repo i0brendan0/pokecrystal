@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const BLACKTHORNCITY_SUPER_NERD1
 	const BLACKTHORNCITY_SUPER_NERD2
 	const BLACKTHORNCITY_GRAMPS1
@@ -21,7 +21,7 @@ BlackthornCity_MapScripts:
 	return
 
 .Santos:
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal SATURDAY, .SantosAppears
 	disappear BLACKTHORNCITY_SANTOS
 	return
@@ -90,7 +90,7 @@ SantosScript:
 	opentext
 	checkevent EVENT_GOT_SPELL_TAG_FROM_SANTOS
 	iftrue .Saturday
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal SATURDAY, .NotSaturday
 	checkevent EVENT_MET_SANTOS_OF_SATURDAY
 	iftrue .MetSantos

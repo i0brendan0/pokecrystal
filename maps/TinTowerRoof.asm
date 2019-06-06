@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const TINTOWERROOF_HO_OH
 
 TinTowerRoof_MapScripts:
@@ -12,7 +12,7 @@ TinTowerRoof_MapScripts:
 	iftrue .NoAppear
 	checkitem RAINBOW_WING
 	iftrue .Appear
-	jump .NoAppear
+	sjump .NoAppear
 
 .Appear:
 	appear TINTOWERROOF_HO_OH
@@ -30,7 +30,7 @@ TinTowerHoOh:
 	pause 15
 	closetext
 	setevent EVENT_FOUGHT_HO_OH
-	writecode VAR_BATTLETYPE, BATTLETYPE_FORCEITEM
+	loadvar VAR_BATTLETYPE, BATTLETYPE_FORCEITEM
 	loadwildmon HO_OH, 60
 	startbattle
 	disappear TINTOWERROOF_HO_OH

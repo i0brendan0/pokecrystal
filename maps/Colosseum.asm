@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const COLOSSEUM_CHRIS1
 	const COLOSSEUM_CHRIS2
 
@@ -13,7 +13,7 @@ Colosseum_MapScripts:
 	callback MAPCALLBACK_NEWMAP, .PreparePokecenter2F
 
 .InitializeColosseum:
-	priorityjump .InitializeAndPreparePokecenter2F
+	prioritysjump .InitializeAndPreparePokecenter2F
 	end
 
 .DummyScene1:

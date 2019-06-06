@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const FUCHSIAGYM_JANINE
 	const FUCHSIAGYM_FUCHSIA_GYM_1
 	const FUCHSIAGYM_FUCHSIA_GYM_2
@@ -39,7 +39,7 @@ FuchsiaGymJanineScript:
 	playsound SFX_GET_BADGE
 	waitsfx
 	setflag ENGINE_SOULBADGE
-	jump .AfterBattle
+	sjump .AfterBattle
 .FightDone:
 	faceplayer
 	opentext
@@ -214,7 +214,7 @@ FuchsiaGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext JANINE, JANINE1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, JANINE, JANINE1
 	jumpstd gymstatue2
 
 Movement_NinjaSpin:

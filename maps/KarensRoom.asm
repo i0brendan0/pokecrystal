@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const KARENSROOM_KAREN
 
 KarensRoom_MapScripts:
@@ -10,7 +10,7 @@ KarensRoom_MapScripts:
 	callback MAPCALLBACK_TILES, .KarensRoomDoors
 
 .LockDoor:
-	priorityjump .KarensDoorLocksBehindYou
+	prioritysjump .KarensDoorLocksBehindYou
 	end
 
 .DummyScene:

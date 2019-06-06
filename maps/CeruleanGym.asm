@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def ; object_event constants
 	const CERULEANGYM_ROCKET
 	const CERULEANGYM_MISTY
 	const CERULEANGYM_SWIMMER_GIRL1
@@ -17,7 +17,7 @@ CeruleanGym_MapScripts:
 	end
 
 .GruntRunsOut:
-	priorityjump .GruntRunsOutScript
+	prioritysjump .GruntRunsOutScript
 	end
 
 .GruntRunsOutScript:
@@ -158,7 +158,7 @@ CeruleanGymStatue:
 	iftrue .Beaten
 	jumpstd gymstatue1
 .Beaten:
-	trainertotext MISTY, MISTY1, MEM_BUFFER_1
+	gettrainername STRING_BUFFER_4, MISTY, MISTY1
 	jumpstd gymstatue2
 
 CeruleanGymGruntRunsDownMovement:
